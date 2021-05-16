@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -8,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace PesonalShopSolution.Model
 {
-    public partial class ApplicationDbContext : DbContext
+    public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext()
         {
@@ -20,11 +22,6 @@ namespace PesonalShopSolution.Model
         }
 
         public virtual DbSet<Admins> Admins { get; set; }
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartDetails> CartDetails { get; set; }
         public virtual DbSet<MigrationHistory> MigrationHistory { get; set; }
@@ -38,70 +35,10 @@ namespace PesonalShopSolution.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Admins>(entity =>
             {
                 entity.Property(e => e.Id).IsFixedLength();
-            });
-
-            modelBuilder.Entity<AspNetRoles>(entity =>
-            {
-                entity.HasIndex(e => e.Name)
-                    .HasName("RoleNameIndex")
-                    .IsUnique();
-            });
-
-            modelBuilder.Entity<AspNetUserClaims>(entity =>
-            {
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<AspNetUserLogins>(entity =>
-            {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId })
-                    .HasName("PK_dbo.AspNetUserLogins");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<AspNetUserRoles>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_dbo.AspNetUserRoles");
-
-                entity.HasIndex(e => e.RoleId)
-                    .HasName("IX_RoleId");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<AspNetUsers>(entity =>
-            {
-                entity.HasIndex(e => e.UserName)
-                    .HasName("UserNameIndex")
-                    .IsUnique();
             });
 
             modelBuilder.Entity<Cart>(entity =>
@@ -235,10 +172,6 @@ namespace PesonalShopSolution.Model
 
                 entity.Property(e => e.PhoneNumber).IsFixedLength();
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
