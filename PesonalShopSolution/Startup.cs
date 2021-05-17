@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PesonalShopSolution.Model;
+using PesonalShopSolution.Data;
 
 namespace PesonalShopSolution
 {
@@ -29,7 +29,6 @@ namespace PesonalShopSolution
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
             services.AddControllersWithViews();
             services.AddRazorPages();

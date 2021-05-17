@@ -7,19 +7,14 @@ using System.Collections.Generic;
 
 namespace PesonalShopSolution.Models
 {
-    public partial class OrderDetails
+    public partial class Comment
     {
-        public OrderDetails()
-        {
-            Order = new HashSet<Order>();
-        }
-
-        public int IdOrderDetails { get; set; }
-        public string Amount { get; set; }
-        public string DiscountCode { get; set; }
+        public int Id { get; set; }
         public int? IdProduct { get; set; }
+        public string IdUser { get; set; }
+        public string Comment1 { get; set; }
 
         public virtual Product IdProductNavigation { get; set; }
-        public virtual ICollection<Order> Order { get; set; }
+        public virtual AspNetUsers IdUserNavigation { get; set; }
     }
 }
