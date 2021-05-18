@@ -27,6 +27,7 @@ namespace PesonalShopSolution.Models
         public string Image { get; set; }
         public int? Price { get; set; }
 
+
         public virtual Brand IdBrandNavigation { get; set; }
         public virtual Specification IdSpecificationsNavigation { get; set; }
         public virtual ICollection<Cart> Cart { get; set; }

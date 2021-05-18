@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\Single.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.10" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
@@ -25,7 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\Single.cshtml" />
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\admin\" />
+    <Folder Include="wwwroot\user\" />
   </ItemGroup>
 
 </Project>

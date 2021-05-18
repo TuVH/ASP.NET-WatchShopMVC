@@ -1,0 +1,35 @@
+﻿<!--
+=========================================================
+Material Dashboard - v2.1.2
+=========================================================
+
+Product Page: https://www.creative-tim.com/product/material-dashboard
+Copyright 2020 Creative Tim (https://www.creative-tim.com)
+Coded by Creative Tim
+
+=========================================================
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @await Html.PartialAsync("_HeadPartial.cshtml")
+    @RenderSection("css", required: false)
+</head>
+<body class="">
+    <!-- Header-->
+    <div class="wrapper ">
+        @await Html.PartialAsync("_SidebarPartial.cshtml")
+        <div class="main-panel">
+            <!-- Navbar -->
+            @await Html.PartialAsync("_NavPartial.cshtml")
+            @RenderBody()
+        </div>
+        @await Html.PartialAsync("_FooterPartial.cshtml")
+
+        <!--Script-->
+        @await Html.PartialAsync("_ScriptPartial.cshtml")
+        @RenderSection("Scripts", required: false)
+    </div>
+</body>
+</html>
