@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PesonalShopSolution.Models;
@@ -9,16 +10,14 @@ using PesonalShopSolution.Models;
 
 namespace PesonalShopSolution.Data
 {
-    public partial class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AspNetUsers, AspNetRoles, int, AspNetUserClaims, AspNetUserRoles, AspNetUserLogins, AspNetRoleClaims, AspNetUserToken>
     {
         public ApplicationDbContext()
         {
         }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        { }
 
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -27,9 +26,7 @@ namespace PesonalShopSolution.Data
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Brand> Brand { get; set; }
         public virtual DbSet<Cart> Cart { get; set; }
-        public virtual DbSet<CartDetails> CartDetails { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
-        public virtual DbSet<MigrationHistory> MigrationHistory { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -37,97 +34,41 @@ namespace PesonalShopSolution.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AspNetRoles>(entity =>
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AspNetRoleClaims>(builder =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("RoleNameIndex")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasMaxLength(128);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(256);
+                builder.HasOne(roleClaim => roleClaim.Role).WithMany(role => role.AspNetRoleClaims).HasForeignKey(roleClaim => roleClaim.RoleId);
+                builder.ToTable("AspNetRoleClaim");
             });
-
-            modelBuilder.Entity<AspNetUserClaims>(entity =>
+            modelBuilder.Entity<AspNetRoles>(builder =>
             {
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
+                builder.ToTable("AspNetRoles");
             });
-
-            modelBuilder.Entity<AspNetUserLogins>(entity =>
+            modelBuilder.Entity<AspNetUserClaims>(builder =>
             {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId })
-                    .HasName("PK_dbo.AspNetUserLogins");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.Property(e => e.LoginProvider).HasMaxLength(128);
-
-                entity.Property(e => e.ProviderKey).HasMaxLength(128);
-
-                entity.Property(e => e.UserId).HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
+                builder.HasOne(userClaim => userClaim.User).WithMany(user => user.AspNetUserClaims).HasForeignKey(userClaim => userClaim.UserId);
+                builder.ToTable("AspNetUserClaims");
             });
-
-            modelBuilder.Entity<AspNetUserRoles>(entity =>
+            modelBuilder.Entity<AspNetUserLogins>(builder =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_dbo.AspNetUserRoles");
-
-                entity.HasIndex(e => e.RoleId)
-                    .HasName("IX_RoleId");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IX_UserId");
-
-                entity.Property(e => e.UserId).HasMaxLength(128);
-
-                entity.Property(e => e.RoleId).HasMaxLength(128);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId");
+                builder.HasOne(userLogin => userLogin.User).WithMany(user => user.AspNetUserLogins).HasForeignKey(userLogin => userLogin.UserId);
+                builder.ToTable("AspNetUserLogins");
             });
-
-            modelBuilder.Entity<AspNetUsers>(entity =>
+            modelBuilder.Entity<AspNetUsers>(builder =>
             {
-                entity.Property(e => e.Id).HasMaxLength(128);
-
-                entity.Property(e => e.Address).HasMaxLength(50);
-
-                entity.Property(e => e.DateOfBirth)
-                    .HasColumnName("Date_of_birth")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
-
-                entity.Property(e => e.UserName)
-                    .HasColumnName("User_name")
-                    .HasMaxLength(50);
+                builder.ToTable("AspNetUsers");
+            });
+            modelBuilder.Entity<AspNetUserRoles>(builder =>
+            {
+                builder.HasOne(userRole => userRole.Role).WithMany(role => role.AspNetUserRoles).HasForeignKey(userRole => userRole.RoleId);
+                builder.HasOne(userRole => userRole.User).WithMany(user => user.AspNetUserRoles).HasForeignKey(userRole => userRole.UserId);
+                builder.ToTable("AspNetUserRoles");
+            });
+            modelBuilder.Entity<AspNetUserToken>(builder =>
+            {
+                builder.HasOne(userToken => userToken.User).WithMany(user => user.AspNetUserTokens).HasForeignKey(userToken => userToken.UserId);
+                builder.ToTable("AspNetUserToken");
             });
 
             modelBuilder.Entity<Brand>(entity =>
@@ -150,33 +91,10 @@ namespace PesonalShopSolution.Data
 
                 entity.Property(e => e.IdProduct).HasColumnName("id_product");
 
-                entity.HasOne(d => d.IdCartDetailsNavigation)
-                    .WithMany(p => p.Cart)
-                    .HasForeignKey(d => d.IdCartDetails)
-                    .HasConstraintName("FK_Cart_Cart_details");
-
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.IdProduct)
                     .HasConstraintName("FK_Cart_Product");
-            });
-
-            modelBuilder.Entity<CartDetails>(entity =>
-            {
-                entity.ToTable("Cart_details");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.IdProduct).HasColumnName("id_product");
-
-                entity.Property(e => e.TotalMoney)
-                    .HasColumnName("Total_money")
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.IdProductNavigation)
-                    .WithMany(p => p.CartDetails)
-                    .HasForeignKey(d => d.IdProduct)
-                    .HasConstraintName("FK_Cart_details_Product");
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -200,24 +118,6 @@ namespace PesonalShopSolution.Data
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.IdUser)
                     .HasConstraintName("FK_Comment_AspNetUsers");
-            });
-
-            modelBuilder.Entity<MigrationHistory>(entity =>
-            {
-                entity.HasKey(e => new { e.MigrationId, e.ContextKey })
-                    .HasName("PK_dbo.__MigrationHistory");
-
-                entity.ToTable("__MigrationHistory");
-
-                entity.Property(e => e.MigrationId).HasMaxLength(150);
-
-                entity.Property(e => e.ContextKey).HasMaxLength(300);
-
-                entity.Property(e => e.Model).IsRequired();
-
-                entity.Property(e => e.ProductVersion)
-                    .IsRequired()
-                    .HasMaxLength(32);
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -314,7 +214,7 @@ namespace PesonalShopSolution.Data
 
                 entity.Property(e => e.IdSpecifications).HasColumnName("id_specifications");
 
-                entity.Property(e => e.Colour).HasMaxLength(50);
+                entity.Property(e => e.Color).HasMaxLength(50);
 
                 entity.Property(e => e.Gender).HasMaxLength(50);
 
@@ -328,10 +228,6 @@ namespace PesonalShopSolution.Data
 
                 entity.Property(e => e.Weight).HasMaxLength(50);
 
-                entity.HasOne(d => d.IdBrandNavigation)
-                    .WithMany(p => p.Specification)
-                    .HasForeignKey(d => d.IdBrand)
-                    .HasConstraintName("FK_Specification_Trademark");
             });
 
         }

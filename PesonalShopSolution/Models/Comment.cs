@@ -11,7 +11,7 @@ namespace PesonalShopSolution.Models
     {
         public int Id { get; set; }
         public int? IdProduct { get; set; }
-        public string IdUser { get; set; }
+        public int IdUser { get; set; }
         public string Comment1 { get; set; }
 
         public virtual Product IdProductNavigation { get; set; }

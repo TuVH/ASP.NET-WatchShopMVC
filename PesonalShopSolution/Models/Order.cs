@@ -11,7 +11,7 @@ namespace PesonalShopSolution.Models
     {
         public int Id { get; set; }
         public DateTime? OrderDate { get; set; }
-        public string IdUser { get; set; }
+        public int IdUser { get; set; }
         public int? IdOrderDetails { get; set; }
 
         public virtual OrderDetails IdOrderDetailsNavigation { get; set; }

@@ -9,10 +9,6 @@ namespace PesonalShopSolution.Models
 {
     public partial class OrderDetails
     {
-        public OrderDetails()
-        {
-            Order = new HashSet<Order>();
-        }
 
         public int IdOrderDetails { get; set; }
         public string Amount { get; set; }

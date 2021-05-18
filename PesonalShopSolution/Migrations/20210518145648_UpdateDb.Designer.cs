@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PesonalShopSolution.Data;
 
 namespace PesonalShopSolution.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210518145648_UpdateDb")]
+    partial class UpdateDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,9 +251,6 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Amount")
-                        .HasColumnType("int");
-
                     b.Property<int?>("IdCartDetails")
                         .HasColumnName("id_cart_details")
                         .HasColumnType("int");
@@ -260,14 +259,40 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdCartDetails");
+
+                    b.HasIndex("IdProduct");
+
+                    b.ToTable("Cart");
+                });
+
+            modelBuilder.Entity("PesonalShopSolution.Models.CartDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdProduct")
+                        .HasColumnName("id_product")
+                        .HasColumnType("int");
+
                     b.Property<string>("TotalMoney")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("Total_money")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdProduct");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart_details");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Comment", b =>
@@ -421,7 +446,7 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Color")
+                    b.Property<string>("Colour")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -450,6 +475,8 @@ namespace PesonalShopSolution.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("IdSpecifications");
+
+                    b.HasIndex("IdBrand");
 
                     b.ToTable("Specification");
                 });
@@ -507,10 +534,23 @@ namespace PesonalShopSolution.Migrations
 
             modelBuilder.Entity("PesonalShopSolution.Models.Cart", b =>
                 {
+                    b.HasOne("PesonalShopSolution.Models.CartDetails", "IdCartDetailsNavigation")
+                        .WithMany("Cart")
+                        .HasForeignKey("IdCartDetails")
+                        .HasConstraintName("FK_Cart_Cart_details");
+
                     b.HasOne("PesonalShopSolution.Models.Product", "IdProductNavigation")
                         .WithMany("Cart")
                         .HasForeignKey("IdProduct")
                         .HasConstraintName("FK_Cart_Product");
+                });
+
+            modelBuilder.Entity("PesonalShopSolution.Models.CartDetails", b =>
+                {
+                    b.HasOne("PesonalShopSolution.Models.Product", "IdProductNavigation")
+                        .WithMany("CartDetails")
+                        .HasForeignKey("IdProduct")
+                        .HasConstraintName("FK_Cart_details_Product");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Comment", b =>
@@ -562,6 +602,14 @@ namespace PesonalShopSolution.Migrations
                         .WithMany("Product")
                         .HasForeignKey("IdSpecifications")
                         .HasConstraintName("FK_Product_Specification");
+                });
+
+            modelBuilder.Entity("PesonalShopSolution.Models.Specification", b =>
+                {
+                    b.HasOne("PesonalShopSolution.Models.Brand", "IdBrandNavigation")
+                        .WithMany("Specification")
+                        .HasForeignKey("IdBrand")
+                        .HasConstraintName("FK_Specification_Trademark");
                 });
 #pragma warning restore 612, 618
         }

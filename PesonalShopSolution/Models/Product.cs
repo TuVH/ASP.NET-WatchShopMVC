@@ -9,13 +9,6 @@ namespace PesonalShopSolution.Models
 {
     public partial class Product
     {
-        public Product()
-        {
-            Cart = new HashSet<Cart>();
-            CartDetails = new HashSet<CartDetails>();
-            Comment = new HashSet<Comment>();
-            OrderDetails = new HashSet<OrderDetails>();
-        }
 
         public int Id { get; set; }
         public int? ProductCode { get; set; }
@@ -31,7 +24,6 @@ namespace PesonalShopSolution.Models
         public virtual Brand IdBrandNavigation { get; set; }
         public virtual Specification IdSpecificationsNavigation { get; set; }
         public virtual ICollection<Cart> Cart { get; set; }
-        public virtual ICollection<CartDetails> CartDetails { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }

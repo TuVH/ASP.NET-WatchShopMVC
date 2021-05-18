@@ -10,8 +10,8 @@ using PesonalShopSolution.Data;
 namespace PesonalShopSolution.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210517140608_AddDb")]
-    partial class AddDb
+    [Migration("20210518150354_UpdateDb2")]
+    partial class UpdateDb2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,22 +21,54 @@ namespace PesonalShopSolution.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("PesonalShopSolution.Models.AspNetRoleClaims", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaim");
+                });
+
             modelBuilder.Entity("PesonalShopSolution.Models.AspNetRoles", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -54,15 +86,12 @@ namespace PesonalShopSolution.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .HasName("IX_UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -70,64 +99,77 @@ namespace PesonalShopSolution.Migrations
             modelBuilder.Entity("PesonalShopSolution.Models.AspNetUserLogins", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LoginProvider", "ProviderKey", "UserId")
-                        .HasName("PK_dbo.AspNetUserLogins");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("UserId")
-                        .HasName("IX_UserId");
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.AspNetUserRoles", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
-                    b.HasKey("UserId", "RoleId")
-                        .HasName("PK_dbo.AspNetUserRoles");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId")
-                        .HasName("IX_RoleId");
-
-                    b.HasIndex("UserId")
-                        .HasName("IX_UserId");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("PesonalShopSolution.Models.AspNetUserToken", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserToken");
+                });
+
             modelBuilder.Entity("PesonalShopSolution.Models.AspNetUsers", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnName("Date_of_birth")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -139,8 +181,16 @@ namespace PesonalShopSolution.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LockoutEndDateUtc")
-                        .HasColumnType("datetime");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -158,11 +208,18 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnName("User_name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -194,6 +251,9 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("Amount")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdCartDetails")
                         .HasColumnName("id_cart_details")
                         .HasColumnType("int");
@@ -202,40 +262,14 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("TotalMoney")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("IdCartDetails");
+                    b.HasKey("Id");
 
                     b.HasIndex("IdProduct");
 
                     b.ToTable("Cart");
-                });
-
-            modelBuilder.Entity("PesonalShopSolution.Models.CartDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProduct")
-                        .HasColumnName("id_product")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TotalMoney")
-                        .HasColumnName("Total_money")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdProduct");
-
-                    b.ToTable("Cart_details");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Comment", b =>
@@ -254,9 +288,9 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdUser")
+                    b.Property<int>("IdUser")
                         .HasColumnName("id_user")
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("int")
                         .HasMaxLength(128);
 
                     b.HasKey("Id");
@@ -266,31 +300,6 @@ namespace PesonalShopSolution.Migrations
                     b.HasIndex("IdUser");
 
                     b.ToTable("Comment");
-                });
-
-            modelBuilder.Entity("PesonalShopSolution.Models.MigrationHistory", b =>
-                {
-                    b.Property<string>("MigrationId")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("ContextKey")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<byte[]>("Model")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ProductVersion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
-
-                    b.HasKey("MigrationId", "ContextKey")
-                        .HasName("PK_dbo.__MigrationHistory");
-
-                    b.ToTable("__MigrationHistory");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Order", b =>
@@ -305,9 +314,9 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnName("id_order_details")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdUser")
+                    b.Property<int>("IdUser")
                         .HasColumnName("id_user")
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("int")
                         .HasMaxLength(128);
 
                     b.Property<DateTime?>("OrderDate")
@@ -414,7 +423,7 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Colour")
+                    b.Property<string>("Color")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -444,9 +453,16 @@ namespace PesonalShopSolution.Migrations
 
                     b.HasKey("IdSpecifications");
 
-                    b.HasIndex("IdBrand");
-
                     b.ToTable("Specification");
+                });
+
+            modelBuilder.Entity("PesonalShopSolution.Models.AspNetRoleClaims", b =>
+                {
+                    b.HasOne("PesonalShopSolution.Models.AspNetRoles", "Role")
+                        .WithMany("AspNetRoleClaims")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.AspNetUserClaims", b =>
@@ -454,7 +470,6 @@ namespace PesonalShopSolution.Migrations
                     b.HasOne("PesonalShopSolution.Models.AspNetUsers", "User")
                         .WithMany("AspNetUserClaims")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -464,7 +479,6 @@ namespace PesonalShopSolution.Migrations
                     b.HasOne("PesonalShopSolution.Models.AspNetUsers", "User")
                         .WithMany("AspNetUserLogins")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -474,37 +488,31 @@ namespace PesonalShopSolution.Migrations
                     b.HasOne("PesonalShopSolution.Models.AspNetRoles", "Role")
                         .WithMany("AspNetUserRoles")
                         .HasForeignKey("RoleId")
-                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PesonalShopSolution.Models.AspNetUsers", "User")
                         .WithMany("AspNetUserRoles")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PesonalShopSolution.Models.AspNetUserToken", b =>
+                {
+                    b.HasOne("PesonalShopSolution.Models.AspNetUsers", "User")
+                        .WithMany("AspNetUserTokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Cart", b =>
                 {
-                    b.HasOne("PesonalShopSolution.Models.CartDetails", "IdCartDetailsNavigation")
-                        .WithMany("Cart")
-                        .HasForeignKey("IdCartDetails")
-                        .HasConstraintName("FK_Cart_Cart_details");
-
                     b.HasOne("PesonalShopSolution.Models.Product", "IdProductNavigation")
                         .WithMany("Cart")
                         .HasForeignKey("IdProduct")
                         .HasConstraintName("FK_Cart_Product");
-                });
-
-            modelBuilder.Entity("PesonalShopSolution.Models.CartDetails", b =>
-                {
-                    b.HasOne("PesonalShopSolution.Models.Product", "IdProductNavigation")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("IdProduct")
-                        .HasConstraintName("FK_Cart_details_Product");
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Comment", b =>
@@ -517,7 +525,9 @@ namespace PesonalShopSolution.Migrations
                     b.HasOne("PesonalShopSolution.Models.AspNetUsers", "IdUserNavigation")
                         .WithMany("Comment")
                         .HasForeignKey("IdUser")
-                        .HasConstraintName("FK_Comment_AspNetUsers");
+                        .HasConstraintName("FK_Comment_AspNetUsers")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.Order", b =>
@@ -530,7 +540,9 @@ namespace PesonalShopSolution.Migrations
                     b.HasOne("PesonalShopSolution.Models.AspNetUsers", "IdUserNavigation")
                         .WithMany("Order")
                         .HasForeignKey("IdUser")
-                        .HasConstraintName("FK_Order_AspNetUsers");
+                        .HasConstraintName("FK_Order_AspNetUsers")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Models.OrderDetails", b =>
@@ -552,14 +564,6 @@ namespace PesonalShopSolution.Migrations
                         .WithMany("Product")
                         .HasForeignKey("IdSpecifications")
                         .HasConstraintName("FK_Product_Specification");
-                });
-
-            modelBuilder.Entity("PesonalShopSolution.Models.Specification", b =>
-                {
-                    b.HasOne("PesonalShopSolution.Models.Brand", "IdBrandNavigation")
-                        .WithMany("Specification")
-                        .HasForeignKey("IdBrand")
-                        .HasConstraintName("FK_Specification_Trademark");
                 });
 #pragma warning restore 612, 618
         }

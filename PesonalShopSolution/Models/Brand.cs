@@ -9,16 +9,10 @@ namespace PesonalShopSolution.Models
 {
     public partial class Brand
     {
-        public Brand()
-        {
-            Product = new HashSet<Product>();
-            Specification = new HashSet<Specification>();
-        }
 
         public int IdBrand { get; set; }
         public string BrandName { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
-        public virtual ICollection<Specification> Specification { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -7,12 +8,8 @@ using System.Collections.Generic;
 
 namespace PesonalShopSolution.Models
 {
-    public partial class AspNetUserLogins
+    public partial class AspNetUserLogins : IdentityUserLogin<int>
     {
-        public string LoginProvider { get; set; }
-        public string ProviderKey { get; set; }
-        public string UserId { get; set; }
-
         public virtual AspNetUsers User { get; set; }
     }
 }

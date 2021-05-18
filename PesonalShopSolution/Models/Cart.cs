@@ -12,8 +12,9 @@ namespace PesonalShopSolution.Models
         public int Id { get; set; }
         public int? IdProduct { get; set; }
         public int? IdCartDetails { get; set; }
+        public int? Amount { get; set; }
+        public string TotalMoney { get; set; }
 
-        public virtual CartDetails IdCartDetailsNavigation { get; set; }
         public virtual Product IdProductNavigation { get; set; }
     }
 }
