@@ -23,11 +23,47 @@ namespace PesonalShopSolution.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult Men()
+        {
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult Single()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
         }
-        public IActionResult Single()
+
+        public IActionResult Erorr()
+        {
+            return View();
+        }
+
+        public IActionResult Brands()
+        {
+            return View();
+        }
+
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
         {
             return View();
         }
