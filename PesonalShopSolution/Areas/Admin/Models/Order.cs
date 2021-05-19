@@ -5,16 +5,16 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace PesonalShopSolution.Models
+namespace PesonalShopSolution.Areas.Admin.Models
 {
-    public partial class Comment
+    public partial class Order
     {
         public int Id { get; set; }
-        public int? IdProduct { get; set; }
+        public DateTime? OrderDate { get; set; }
         public int IdUser { get; set; }
-        public string Comment1 { get; set; }
+        public int? IdOrderDetails { get; set; }
 
-        public virtual Product IdProductNavigation { get; set; }
+        public virtual OrderDetails IdOrderDetailsNavigation { get; set; }
         public virtual AspNetUsers IdUserNavigation { get; set; }
     }
 }

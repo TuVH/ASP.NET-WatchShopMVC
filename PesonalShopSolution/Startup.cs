@@ -6,8 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PesonalShopSolution.Areas.Admin.Models;
 using PesonalShopSolution.Data;
-using PesonalShopSolution.Models;
+
 
 namespace PesonalShopSolution
 {

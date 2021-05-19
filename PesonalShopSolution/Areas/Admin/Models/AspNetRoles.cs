@@ -6,10 +6,11 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace PesonalShopSolution.Models
+namespace PesonalShopSolution.Areas.Admin.Models
 {
-    public partial class AspNetUserClaims : IdentityUserClaim<int>
-    { 
-        public virtual AspNetUsers User { get; set; }
+    public partial class AspNetRoles : IdentityRole<int>
+    {
+        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PesonalShopSolution.Models
+namespace PesonalShopSolution.Areas.Admin.Models
 {
     public class AspNetRoleClaims : IdentityRoleClaim<int>
     {
