@@ -5,17 +5,16 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace PesonalShopSolution.Models
+namespace PesonalShopSolution.Areas.Admin.Models
 {
-    public partial class OrderDetails
+    public partial class Cart
     {
-
-        public int IdOrderDetails { get; set; }
-        public string Amount { get; set; }
-        public string DiscountCode { get; set; }
+        public int Id { get; set; }
         public int? IdProduct { get; set; }
+        public int? IdCartDetails { get; set; }
+        public int? Amount { get; set; }
+        public string TotalMoney { get; set; }
 
         public virtual Product IdProductNavigation { get; set; }
-        public virtual ICollection<Order> Order { get; set; }
     }
 }
