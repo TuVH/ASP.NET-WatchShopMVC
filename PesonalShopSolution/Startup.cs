@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PesonalShopSolution.Areas.Admin.Models;
-using PesonalShopSolution.Data;
+using PesonalShopSolution.Areas.Admin.Data;
 
 
 namespace PesonalShopSolution
@@ -27,7 +27,8 @@ namespace PesonalShopSolution
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<AspNetUsers, AspNetRoles>()
+            services.AddIdentity<AspNetUsers, AspNetRoles>
+                (options => options.SignIn.RequireConfirmedAccount = true)
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
