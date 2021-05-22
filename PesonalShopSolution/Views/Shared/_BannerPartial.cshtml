@@ -8,7 +8,7 @@
         <div class="header_top">
             <div class="header_top_left">
                 <div class="box_11">
-                    <a href="checkout.html">
+                    <a asp-controller="Home" asp-action="Checkout">
                         <h4><p>Cart: <span class="simpleCart_total"></span> (<span id="simpleCart_quantity" class="simpleCart_quantity"></span> items)</p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
                     </a>
                 </div>
@@ -24,10 +24,7 @@
                     </select>
                 </div>
                 <ul class="header_user_info">
-                    <a class="login" href="login.html">
-                        <i class="user"> </i>
-                        <li class="user_desc">My Account</li>
-                    </a>
+                    @await Html.PartialAsync("_LoginPartial.cshtml")
                     <div class="clearfix"> </div>
                 </ul>
                 <!-- start search-->
@@ -53,7 +50,7 @@
         </div>
         <div class="header_bottom">
             <div class="logo">
-                <h1><a href="index.html"><span class="m_1">W</span>atches</a></h1>
+                <h1><a asp-controller="Home" asp-action="Index"><span class="m_1">W</span>atches</a></h1>
             </div>
             <div class="menu">
                 <ul class="megamenu skyblue">
@@ -220,7 +217,7 @@
                         </div>
                     </li>
                     <li><a class="color10" href="brands.html">Brands</a></li>
-                    <li class="active grid"><a class="color3" href="index.html">Sale</a></li>
+                    <li class="active grid"><a class="color3" asp-controller="Home" asp-action="Index">Sale</a></li>
                     <li><a class="color7" href="404.html">News</a></li>
                     <div class="clearfix"> </div>
                 </ul>

@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PesonalShopSolution.Areas.Admin.Models;
 using PesonalShopSolution.Models;
+using PesonalShopSolution.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,11 +15,14 @@ namespace PesonalShopSolution.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<AspNetUsers> _userManager;
+        private readonly SignInManager<AspNetUsers> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserManager<AspNetUsers> userManager,
+                                      SignInManager<AspNetUsers> signInManager)
         {
-            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -23,21 +30,79 @@ namespace PesonalShopSolution.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, true, lockoutOnFailure: true);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError("CustomError", "Invalid Login Attempt");
+
+            }
+            return View(user);
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Login");
         }
 
         public IActionResult Men()
         {
             return View();
         }
-
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new AspNetUsers
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                };
 
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return RedirectToAction("index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("CustomError", error.Description);
+                }
+
+                ModelState.AddModelError("CustomError", "Invalid Login Attempt");
+
+            }
+            return View(model);
+        }
         public IActionResult Single()
         {
             return View();
