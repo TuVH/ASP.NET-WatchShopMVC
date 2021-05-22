@@ -18,7 +18,6 @@ namespace PesonalShopSolution.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<AspNetUsers> _userManager;
         private readonly SignInManager<AspNetUsers> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
@@ -26,7 +25,6 @@ namespace PesonalShopSolution.Areas.Identity.Pages.Account
             ILogger<LoginModel> logger,
             UserManager<AspNetUsers> userManager)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
