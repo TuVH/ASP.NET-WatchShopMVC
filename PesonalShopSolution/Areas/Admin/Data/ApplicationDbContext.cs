@@ -186,7 +186,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
 
                 entity.Property(e => e.IdBrand).HasColumnName("id_brand");
 
-                entity.Property(e => e.IdSpecifications).HasColumnName("id_specifications");
+              
 
                 entity.Property(e => e.Image)
                     .HasMaxLength(50)
@@ -203,10 +203,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
                     .HasForeignKey(d => d.IdBrand)
                     .HasConstraintName("FK_Product_Trademark");
 
-                entity.HasOne(d => d.IdSpecificationsNavigation)
-                    .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.IdSpecifications)
-                    .HasConstraintName("FK_Product_Specification");
+               
             });
 
             modelBuilder.Entity<Specification>(entity =>
@@ -219,7 +216,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
 
                 entity.Property(e => e.Gender).HasMaxLength(50);
 
-                entity.Property(e => e.IdBrand).HasColumnName("id_brand");
+                entity.Property(e => e.IdProduct).HasColumnName("id_product");
 
                 entity.Property(e => e.Material).HasMaxLength(50);
 
@@ -228,6 +225,11 @@ namespace PesonalShopSolution.Areas.Admin.Data
                 entity.Property(e => e.Warranty).HasMaxLength(50);
 
                 entity.Property(e => e.Weight).HasMaxLength(50);
+
+                entity.HasOne(d => d.IdProducts)
+                   .WithMany(p => p.Specifications)
+                   .HasForeignKey(d => d.IdProduct)
+                   .HasConstraintName("FK_Specification_Product");
 
             });
 

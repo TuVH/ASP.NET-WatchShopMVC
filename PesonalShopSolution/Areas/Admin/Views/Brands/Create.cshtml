@@ -1,0 +1,38 @@
+﻿@model PesonalShopSolution.Areas.Admin.Models.Brand
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Create Brands</h4>
+                    </div>
+                    <p></p>
+                    <div class="card-body">
+                        <form asp-action="Create" asp-controller="Brands">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="BrandName" class="bmd-label-floating"><b>Brand_Name :</b></label>
+                                        <input asp-for="BrandName" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <center>
+                                <button type="submit" class="btn btn-primary ">Create Brands</button>
+                            </center>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

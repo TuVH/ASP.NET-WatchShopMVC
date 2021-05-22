@@ -10,7 +10,8 @@ namespace PesonalShopSolution.Areas.Admin.Models
     public partial class Specification
     {
         public int IdSpecifications { get; set; }
-        public int? IdBrand { get; set; }
+
+        public int? IdProduct { get; set; }
         public string Shape { get; set; }
         public string Gender { get; set; }
         public string Color { get; set; }
@@ -19,5 +20,6 @@ namespace PesonalShopSolution.Areas.Admin.Models
         public string Warranty { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
+        public virtual Product IdProducts { get; set; }
     }
 }
