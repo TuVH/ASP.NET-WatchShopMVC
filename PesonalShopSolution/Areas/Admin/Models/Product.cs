@@ -14,7 +14,6 @@ namespace PesonalShopSolution.Areas.Admin.Models
         public int? ProductCode { get; set; }
         public string ProductName { get; set; }
         public string DetailDescription { get; set; }
-        public int? IdSpecifications { get; set; }
         public int? IdBrand { get; set; }
         public string Evaluate { get; set; }
         public string Image { get; set; }
@@ -22,7 +21,8 @@ namespace PesonalShopSolution.Areas.Admin.Models
 
 
         public virtual Brand IdBrandNavigation { get; set; }
-        public virtual Specification IdSpecificationsNavigation { get; set; }
+
+        public virtual ICollection<Specification> Specifications { get; set; }
         public virtual ICollection<Cart> Cart { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
