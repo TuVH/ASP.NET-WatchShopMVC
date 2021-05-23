@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PesonalShopSolution.Areas.Admin.Models;
 using PesonalShopSolution.Areas.Admin.Data;
-
+using System;
 
 namespace PesonalShopSolution
 {
@@ -39,9 +39,18 @@ namespace PesonalShopSolution
                     options.Password.RequiredUniqueChars = 1;
                 })
                 .AddDefaultTokenProviders()
-                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Home/Login";
+                options.AccessDeniedPath = "/Home/Login";
+                options.SlidingExpiration = true;
+            });
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
