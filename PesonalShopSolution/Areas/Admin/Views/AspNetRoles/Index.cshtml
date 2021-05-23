@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.AspNetRoles>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>User Profile</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Role
+            </th>
+            <th>
+                UserName
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @foreach (var user in item.AspNetUserRoles)
+                    {
+                        @user.User.UserName
+                        <br />
+                    }
+                    @if (item.AspNetUserRoles.Count == 0)
+                    {
+                    <a asp-controller="AspNetUserRoles" asp-action="Create" asp-route-roleId="@item.Id"><i class="fa fa-pencil-square-o" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                    }
+                </td>
+                <td>
+                    @foreach (var user in item.AspNetUserRoles)
+                    {
+                        <a asp-controller="AspNetUserRoles" asp-action="Delete" asp-route-roleId="@user.RoleId" asp-route-userId="@user.UserId"><i class="fa fa-trash" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                        <a asp-controller="AspNetUserRoles" asp-action="Create" asp-route-roleId="@user.RoleId"><i class="fa fa-pencil-square-o" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
