@@ -1,0 +1,82 @@
+﻿@model PesonalShopSolution.Areas.Admin.Models.Specification
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a asp-action="Index"><i class="fa fa-arrow-left" aria-hidden="true" style="font-size:30px"> Back </i></a>
+                </p>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Detail Specification </h4>
+                    </div>
+                    <div class="card-body">
+                        
+                            <div class="row">
+                                <input asp-for="IdSpecifications" type="hidden" class="form-control" required>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="IdProduct" class="bmd-label-floating"><b>Product_Name :</b></label>
+                                        <select asp-for="IdProduct" class="form-control" asp-items="@(new SelectList(ViewBag.specifications,"Id","ProductName"))"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Shape" class="bmd-label-floating"><b>Shape :</b></label>
+                                        <input asp-for="Shape" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Gender" class="bmd-label-floating"><b>Gender :</b></label>
+                                        <input asp-for="Gender" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Color" class="bmd-label-floating"><b>Color :</b></label>
+                                        <input asp-for="Color" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Material" class="bmd-label-floating"><b>Material :</b></label>
+                                        <input asp-for="Material" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Weight" class="bmd-label-floating"><b>Weight :</b></label>
+                                        <input asp-for="Weight" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Warranty" class="bmd-label-floating"><b>Warranty :</b></label>
+                                        <input asp-for="Warranty" type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
