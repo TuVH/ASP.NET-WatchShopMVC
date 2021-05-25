@@ -1,46 +1,36 @@
-﻿@model PesonalShopSolution.Areas.Admin.Models.AspNetUserRoles
+﻿@model PesonalShopSolution.ViewModels.CreateRoleViewModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<h1>Create</h1>
 
-
-<!-- End Navbar -->
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <a asp-action="Index"><i class="fa fa-arrow-left" aria-hidden="true" style="font-size:30px"> Back </i></a>
-                </p>
-                <div class="card">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title">Create UserRoles</h4>
-                    </div>
-                    <div class="card-body">
-                        <form asp-action="Create">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="UserId" class="bmd-label-floating"><b>User Name :</b></label>
-                                <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.Users,"Id","UserName"))"></select>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="RoleId" class="bmd-label-floating"><b>Role Name :</b></label>
-                                <select asp-for="RoleId" class="form-control" asp-items="@(new SelectList( ViewBag.Roles,"Id","Name"))"></select>
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="Create" class="btn btn-primary" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<h4>AspNetRoles</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <select asp-for="UserId"
+                        asp-items="@(new SelectList(Model.AspNetUsers,"Id","UserName"))">
+                    <option>Please select one</option>
+                </select>
             </div>
-
-        </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="RoleId" />
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
 
+<div>
+    <a asp-controller="AspNetRoles" asp-action="Index">Back to List</a>
+</div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

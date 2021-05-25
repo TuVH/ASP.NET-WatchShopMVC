@@ -5,76 +5,52 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<h1>User Profile</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Role
+            </th>
+            <th>
+                UserName
+            </th>
+            <th>
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <a asp-action="Create"><i class="fa fa-plus-circle" aria-hidden="true" style="font-size:30px"> Create </i></a>
-                </p>
-                <div class="card">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Roles Table</h4>
-
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class=" text-primary">
-                                <th>
-                                    Id
-                                </th>
-                                <th>
-                                    Name
-                                </th>
-                                <th>
-                                    NormalizedName
-                                </th>
-                                <th>
-                                    ConcurrencyStamp
-                                </th>
-                                <th>Edit</th>
-                                <th>Details</th>
-                                <th>Delete</th>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Id)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.NormalizedName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
-                                            </td>
-                                            <td>
-                                                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" style="font-size:20px" aria-hidden="true"></i></a>
-                                            </td>
-                                            <td>
-                                                <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye" style="font-size:20px" aria-hidden="true"></i></a>
-                                            </td>
-                                            <td>
-                                                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash" style="font-size:20px" aria-hidden="true"></i></a>
-                                            </td>
-
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @foreach (var user in item.AspNetUserRoles)
+                    {
+                        @user.User.UserName
+                        <br />
+                    }
+                    @if (item.AspNetUserRoles.Count == 0)
+                    {
+                    <a asp-controller="AspNetUserRoles" asp-action="Create" asp-route-roleId="@item.Id"><i class="fa fa-pencil-square-o" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                    }
+                </td>
+                <td>
+                    @foreach (var user in item.AspNetUserRoles)
+                    {
+                        <a asp-controller="AspNetUserRoles" asp-action="Delete" asp-route-roleId="@user.RoleId" asp-route-userId="@user.UserId"><i class="fa fa-trash" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                        <a asp-controller="AspNetUserRoles" asp-action="Create" asp-route-roleId="@user.RoleId"><i class="fa fa-pencil-square-o" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

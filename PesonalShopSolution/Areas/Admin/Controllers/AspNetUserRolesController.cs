@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PesonalShopSolution.Areas.Admin.Data;
 using PesonalShopSolution.Areas.Admin.Models;
+using PesonalShopSolution.ViewModels;
 
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AspNetUserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,39 +23,19 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/AspNetUserRoles
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.AspNetUserRoles.Include(a => a.Role).Include(a => a.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Admin/AspNetUserRoles/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var aspNetUserRoles = await _context.AspNetUserRoles
-                .Include(a => a.Role)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (aspNetUserRoles == null)
-            {
-                return NotFound();
-            }
-
-            return View(aspNetUserRoles);
-        }
 
         // GET: Admin/AspNetUserRoles/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int roleId)
         {
-            ViewBag.Roles = _context.AspNetRoles.ToList();
-            ViewBag.Users = _context.AspNetUsers.ToList();
-            return View();
+            var role = await _context.AspNetUsers.Select(x => x).ToListAsync();
+
+            var create = new CreateRoleViewModel()
+            {
+                RoleId = roleId,
+                AspNetUsers = role
+            };
+
+            return View(create);
         }
 
         // POST: Admin/AspNetUserRoles/Create
@@ -60,108 +43,55 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,RoleId")] AspNetUserRoles aspNetUserRoles)
+        public async Task<IActionResult> Create([Bind("Id,Name")] int roleId, int userId)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aspNetUserRoles);
+                var role = new AspNetUserRoles
+                {
+                    RoleId = roleId,
+                    UserId = userId
+                };
+                var find = await _context.AspNetUserRoles.FirstOrDefaultAsync(x => x.RoleId == roleId && x.UserId == userId);
+                if (find != null)
+                {
+                    return RedirectToAction("Index", "AspNetRoles");
+                }
+                await _context.AspNetUserRoles.AddAsync(role);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "AspNetRoles");
             }
-            ViewData["RoleId"] = new SelectList(_context.AspNetRoles, "Id", "Id", aspNetUserRoles.RoleId);
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", aspNetUserRoles.UserId);
-            return View(aspNetUserRoles);
+            return NotFound();
         }
 
-        // GET: Admin/AspNetUserRoles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var aspNetUserRoles = await _context.AspNetUserRoles.FindAsync(id);
-            if (aspNetUserRoles == null)
-            {
-                return NotFound();
-            }
-            ViewData["RoleId"] = new SelectList(_context.AspNetRoles, "Id", "Id", aspNetUserRoles.RoleId);
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", aspNetUserRoles.UserId);
-            return View(aspNetUserRoles);
-        }
-
-        // POST: Admin/AspNetUserRoles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,RoleId")] AspNetUserRoles aspNetUserRoles)
-        {
-            if (id != aspNetUserRoles.UserId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(aspNetUserRoles);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AspNetUserRolesExists(aspNetUserRoles.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["RoleId"] = new SelectList(_context.AspNetRoles, "Id", "Id", aspNetUserRoles.RoleId);
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", aspNetUserRoles.UserId);
-            return View(aspNetUserRoles);
-        }
 
         // GET: Admin/AspNetUserRoles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int roleId, int userId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var aspNetUserRoles = await _context.AspNetUserRoles
-                .Include(a => a.Role)
+            var aspNetRoles = await _context.AspNetUserRoles
                 .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (aspNetUserRoles == null)
+                .FirstOrDefaultAsync(m => m.RoleId == roleId && m.UserId == userId);
+            if (aspNetRoles == null)
             {
                 return NotFound();
             }
 
-            return View(aspNetUserRoles);
+            return View(aspNetRoles);
         }
+
 
         // POST: Admin/AspNetUserRoles/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int roleId, int userId)
         {
-            var aspNetUserRoles = await _context.AspNetUserRoles.FindAsync(id);
-            _context.AspNetUserRoles.Remove(aspNetUserRoles);
+            var aspNetRoles = await _context.AspNetUserRoles
+                .Where(x => x.RoleId == roleId && x.UserId == userId)
+                .FirstOrDefaultAsync();
+            _context.AspNetUserRoles.Remove(aspNetRoles);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "AspNetRoles");
         }
 
-        private bool AspNetUserRolesExists(int id)
-        {
-            return _context.AspNetUserRoles.Any(e => e.UserId == id);
-        }
     }
 }
