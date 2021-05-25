@@ -1,9 +1,11 @@
-﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.AspNetUsers>
+﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.AspNetRoles>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+
 
 <div class="content">
     <div class="container-fluid">
@@ -11,50 +13,47 @@
             <div class="col-md-12">
                 <p>
                     <a asp-action="Create"><i class="fa fa-plus-circle" aria-hidden="true" style="font-size:30px"> Create </i></a>
-                    <a asp-controller="Specifications" asp-action="Index" style="padding-left:740px"><i class="fa fa-info-circle" aria-hidden="true" style="font-size:30px"> Specifications </i></a>
                 </p>
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Products Table</h4>
+                        <h4 class="card-title ">Roles Table</h4>
 
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
-                                <th>ID</th>
-                                <th>UserName</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>PhoneNumber</th>
-                                <th>DateOfBirth</th>
+                                <th>
+                                    Id
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    NormalizedName
+                                </th>
+                                <th>
+                                    ConcurrencyStamp
+                                </th>
                                 <th>Edit</th>
-                                <th>Detail</th>
+                                <th>Details</th>
                                 <th>Delete</th>
-
                                 </thead>
                                 <tbody>
-                                    <center>
-                                        @foreach (var item in Model)
-                                        {
+                                    @foreach (var item in Model)
+                                    {
                                         <tr>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.UserName)
+                                                @Html.DisplayFor(modelItem => item.Name)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Email)
+                                                @Html.DisplayFor(modelItem => item.NormalizedName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Address)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.PhoneNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                                @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
                                             </td>
                                             <td>
                                                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" style="font-size:20px" aria-hidden="true"></i></a>
@@ -67,8 +66,8 @@
                                             </td>
 
                                         </tr>
-                                        }
-                                    </center>
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
@@ -78,3 +77,4 @@
         </div>
     </div>
 </div>
+

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,11 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
     public class AspNetUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public AspNetUsersController(ApplicationDbContext context)
+        private readonly UserManager<AspNetUsers> _userManager;
+        public AspNetUsersController(ApplicationDbContext context, UserManager<AspNetUsers> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Admin/AspNetUsers
@@ -59,9 +61,29 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(aspNetUsers);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = new AspNetUsers
+                {
+                    Address = aspNetUsers.Address,
+                    DateOfBirth = aspNetUsers.DateOfBirth,
+                    Id = aspNetUsers.Id,
+                    UserName = aspNetUsers.Email,
+                    Email = aspNetUsers.Email,
+                    PhoneNumber = aspNetUsers.PhoneNumber,
+                    AccessFailedCount = aspNetUsers.AccessFailedCount
+                };
+                var result = await _userManager.CreateAsync(user, aspNetUsers.PasswordHash);
+                if (result.Succeeded)
+                {
+
+
+                    return RedirectToAction("index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("CustomError", error.Description);
+                }
+                ModelState.AddModelError("CustomError", "Invalid Login Attempt");
             }
             return View(aspNetUsers);
         }

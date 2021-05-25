@@ -1,0 +1,58 @@
+﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.AspNetUserRoles>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a asp-action="Create"><i class="fa fa-plus-circle" aria-hidden="true" style="font-size:30px"> Create </i></a>
+                    <a asp-controller="Specifications" asp-action="Index" style="padding-left:740px"><i class="fa fa-info-circle" aria-hidden="true" style="font-size:30px"> Specifications </i></a>
+                </p>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Products Table</h4>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                <th>RoleName</th>
+                                <th>UserName</th>
+                               
+                                <th>Delete</th>
+
+                                </thead>
+                                <tbody>
+                                    <center>
+                                        @foreach (var item in Model)
+                                        {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Role.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.User.UserName)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Delete" asp-route-id="@item.UserId"><i class="fa fa-trash" style="font-size:20px" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                        }
+                                    </center>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

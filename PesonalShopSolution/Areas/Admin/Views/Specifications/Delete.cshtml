@@ -1,4 +1,4 @@
-﻿@model PesonalShopSolution.Areas.Admin.Models.Product
+﻿@model PesonalShopSolution.Areas.Admin.Models.Specification
 
 @{
     ViewData["Title"] = "Delete";
@@ -13,57 +13,57 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title">Delete Product</h4>
+                        <h4 class="card-title">Delete Specification </h4>
                     </div>
                     <p></p>
                     <div class="card-body">
                         <dl class="row">
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.ProductCode)
+                                @Html.DisplayNameFor(model => model.Shape)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.ProductCode)
+                                @Html.DisplayFor(model => model.Shape)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.ProductName)
+                                @Html.DisplayNameFor(model => model.Gender)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.ProductName)
+                                @Html.DisplayFor(model => model.Gender)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.DetailDescription)
+                                @Html.DisplayNameFor(model => model.Color)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.DetailDescription)
+                                @Html.DisplayFor(model => model.Color)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Evaluate)
+                                @Html.DisplayNameFor(model => model.Material)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Evaluate)
+                                @Html.DisplayFor(model => model.Material)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Image)
+                                @Html.DisplayNameFor(model => model.Weight)
                             </dt>
                             <dd class="col-sm-10">
-                                <img class="image" id="imgPre" src="~/admin/img/pro/@Html.DisplayFor(model => model.Image)" style='width: 150px; height: 150px'>
+                                @Html.DisplayFor(model => model.Weight)
                             </dd>
                             <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Price) $
+                                @Html.DisplayNameFor(model => model.Warranty)
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Price)
+                                @Html.DisplayFor(model => model.Warranty)
                             </dd>
                             <dt class="col-sm-2">
-                               BrandName
+                                ProductName
                             </dt>
                             <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.IdBrandNavigation.BrandName)
+                                @Html.DisplayFor(model => model.IdProducts.ProductName)
                             </dd>
                         </dl>
 
                         <form asp-action="Delete">
-                            <input type="hidden" asp-for="IdBrand" />
+                            <input type="hidden" asp-for="IdSpecifications" />
                             <input type="submit" value="Delete" class="btn btn-danger" /> |
                             <a asp-action="Index">Back to List</a>
                         </form>

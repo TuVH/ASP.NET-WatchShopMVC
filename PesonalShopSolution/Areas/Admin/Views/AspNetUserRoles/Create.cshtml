@@ -1,0 +1,46 @@
+﻿@model PesonalShopSolution.Areas.Admin.Models.AspNetUserRoles
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- End Navbar -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a asp-action="Index"><i class="fa fa-arrow-left" aria-hidden="true" style="font-size:30px"> Back </i></a>
+                </p>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Create UserRoles</h4>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="UserId" class="bmd-label-floating"><b>User Name :</b></label>
+                                <select asp-for="UserId" class="form-control" asp-items="@(new SelectList(ViewBag.Users,"Id","UserName"))"></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="RoleId" class="bmd-label-floating"><b>Role Name :</b></label>
+                                <select asp-for="RoleId" class="form-control" asp-items="@(new SelectList( ViewBag.Roles,"Id","Name"))"></select>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
