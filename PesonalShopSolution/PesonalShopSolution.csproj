@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-PesonalShopSolution-5C9EAE2E-7AE0-414E-9F6E-0C6185DF9BB7</UserSecretsId>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210518145506_Updatedatabase.cs" />
+    <Compile Remove="Migrations\20210518145506_Updatedatabase.Designer.cs" />
+    <Compile Remove="Migrations\20210518145553_UpdateDb.cs" />
+    <Compile Remove="Migrations\20210518145553_UpdateDb.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.15" />
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\admin\" />
+    <Folder Include="wwwroot\user\" />
+  </ItemGroup>
+
+</Project>

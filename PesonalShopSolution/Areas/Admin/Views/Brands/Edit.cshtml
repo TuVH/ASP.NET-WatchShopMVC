@@ -1,0 +1,39 @@
+﻿@model PesonalShopSolution.Areas.Admin.Models.Brand
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Edit Brands</h4>
+                    </div>
+                    <p></p>
+                    <div class="card-body">
+                        <form asp-action="Edit" asp-controller="Brands">
+                            <div class="row">
+                                <input asp-for="IdBrand" type="hidden" class="form-control">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="BrandName" class="bmd-label-floating"><b>Brand_Name :</b></label>
+                                        <input asp-for="BrandName" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <center>
+                                 <button type="submit" class="btn btn-primary ">Edit Brands</button>
+                            </center>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
