@@ -280,7 +280,6 @@ i.user{
 ul.header_user_info li.user_desc{
 	display: block;
 	font-size: 12px;
-    text-transform: uppercase;
 	cursor: pointer;
 	/* background: #fb5c22; */
 	-moz-transition: all 0.2s linear;
@@ -289,6 +288,7 @@ ul.header_user_info li.user_desc{
 	transition: all 0.2s linear;
 	float: left;
 	margin-top:6px;
+	color:aqua;
 }
 .search-box {
 	position: relative;
@@ -740,7 +740,6 @@ x:-o-prefocus, .lb-overlay img {
 }
 .account-top span{
   font-size: 1em;
-  color: #999;
   display: block;
   line-height: 2em;
 }
