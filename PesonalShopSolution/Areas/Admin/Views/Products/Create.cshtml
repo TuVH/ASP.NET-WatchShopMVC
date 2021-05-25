@@ -5,59 +5,110 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductCode" class="control-label"></label>
-                <input asp-for="ProductCode" class="form-control" />
-                <span asp-validation-for="ProductCode" class="text-danger"></span>
+<!-- End Navbar -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a asp-action="Index"><i class="fa fa-arrow-left" aria-hidden="true" style="font-size:30px"> Back </i></a>
+                </p>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Create Product</h4>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Create" asp-controller="Products" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="IdBrand" class="bmd-label-floating"><b>Brand :</b></label>
+                                        <select asp-for="IdBrand" class="form-control" asp-items="@(new SelectList(ViewBag.products,"IdBrand","BrandName"))"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="ProductCode" class="bmd-label-floating"><b>Product_Code :</b></label>
+                                        <input asp-for="ProductCode" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="ProductName" class="bmd-label-floating"><b>Product_Name :</b></label>
+                                        <input asp-for="ProductName" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Price" class="bmd-label-floating"><b>Price :</b></label>
+                                        <input asp-for="Price" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                             
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="Evaluate" class="bmd-label-floating"><b>Evaluate :</b></label>
+                                        <input asp-for="Evaluate" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="DetailDescription" class="bmd-label-floating"><b>Description :</b></label>
+                                        <input asp-for="DetailDescription" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label asp-for="Image" class="bmd-label-floating"><b>Image :</b></label>
+                                    <div class="form-group">
+                                        <img id="imgPre" style="width:800px ; height: 400px" src="~/admin/img/pro/noimg.jpg" alt="no imge" class="img-thumbnail" />
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="ful" name="ful">
+                                        <label class="custom-file-label" for="ful">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <center>
+                                <button type="submit" class="btn btn-primary ">Create Product</button>
+                            </center>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DetailDescription" class="control-label"></label>
-                <input asp-for="DetailDescription" class="form-control" />
-                <span asp-validation-for="DetailDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdBrand" class="control-label"></label>
-                <select asp-for="IdBrand" class ="form-control" asp-items="ViewBag.IdBrand"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Evaluate" class="control-label"></label>
-                <input asp-for="Evaluate" class="form-control" />
-                <span asp-validation-for="Evaluate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function readURL(input, idImg) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(idImg).attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#ful").change(function () {
+            readURL(this, '#imgPre');
+        });
+    </script>
+
 }
+
