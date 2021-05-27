@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PesonalShopSolution.Areas.Admin.Data;
 using PesonalShopSolution.Areas.Admin.Models;
 using PesonalShopSolution.Models;
 using PesonalShopSolution.ViewModels;
@@ -17,18 +18,35 @@ namespace PesonalShopSolution.Controllers
     {
         private readonly UserManager<AspNetUsers> _userManager;
         private readonly SignInManager<AspNetUsers> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(UserManager<AspNetUsers> userManager,
-                                      SignInManager<AspNetUsers> signInManager)
+        public HomeController(UserManager<AspNetUsers> userManager,SignInManager<AspNetUsers> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var list = from x in _context.Brand
+                       from y in _context.Product
+                       from z in _context.Specification
+                       where x.IdBrand == y.IdBrand && y.Id == z.IdProduct && z.Gender == "Male"
+                       select new { y.Id , y.Price , y.Image ,y.ProductName};
+
+            var list2 = from x in _context.Brand
+                       from y in _context.Product
+                       from z in _context.Specification
+                       where x.IdBrand == y.IdBrand && y.Id == z.IdProduct && z.Gender == "Female"
+                       select new { y.Id, y.Price, y.Image, y.ProductName };
+
+            ViewBag.list = list.ToArray();
+            ViewBag.list2 = list2.ToArray();
+
             return View();
         }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -103,8 +121,17 @@ namespace PesonalShopSolution.Controllers
             }
             return View(model);
         }
-        public IActionResult Single()
+
+
+      
+        public IActionResult Single(int Id)
         {
+            var list = from x in _context.Brand
+                       from y in _context.Product
+                       from z in _context.Specification
+                       where x.IdBrand == y.IdBrand && y.Id == z.IdProduct && y.Id == Id
+                       select new { y.Id, y.Price, y.Image, y.ProductName,y.DetailDescription , z.Shape ,z.Material , z.Color , z.Gender ,z.Weight ,z.Warranty};
+            ViewBag.list = list.ToArray();
             return View();
         }
 

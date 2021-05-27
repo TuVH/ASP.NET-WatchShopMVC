@@ -177,8 +177,8 @@ namespace PesonalShopSolution.Areas.Admin.Data
 
                 entity.Property(e => e.DetailDescription)
                     .HasColumnName("Detail_description")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(5000);
+                    
 
                 entity.Property(e => e.Evaluate)
                     .HasMaxLength(50)

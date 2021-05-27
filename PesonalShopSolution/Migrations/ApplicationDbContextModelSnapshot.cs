@@ -370,9 +370,8 @@ namespace PesonalShopSolution.Migrations
 
                     b.Property<string>("DetailDescription")
                         .HasColumnName("Detail_description")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(5000);
 
                     b.Property<string>("Evaluate")
                         .HasColumnType("varchar(50)")

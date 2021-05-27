@@ -10,7 +10,7 @@ using PesonalShopSolution.Areas.Admin.Data;
 namespace PesonalShopSolution.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210522065249_UpdateDb3")]
+    [Migration("20210527131453_UpdateDb3")]
     partial class UpdateDb3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -372,9 +372,8 @@ namespace PesonalShopSolution.Migrations
 
                     b.Property<string>("DetailDescription")
                         .HasColumnName("Detail_description")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(5000);
 
                     b.Property<string>("Evaluate")
                         .HasColumnType("varchar(50)")
