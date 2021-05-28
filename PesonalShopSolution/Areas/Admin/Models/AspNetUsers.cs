@@ -19,5 +19,6 @@ namespace PesonalShopSolution.Areas.Admin.Models
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
         public virtual ICollection<Order> Order { get; set; }
+        public virtual ICollection<Cart> Cart { get; set; }
     }
 }

@@ -96,6 +96,11 @@ namespace PesonalShopSolution.Areas.Admin.Data
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.IdProduct)
                     .HasConstraintName("FK_Cart_Product");
+
+                entity.HasOne(d => d.IdUserNavigation)
+                    .WithMany(p => p.Cart)
+                    .HasForeignKey(d => d.IdUser)
+                    .HasConstraintName("FK_Cart_AspNetUsers");
             });
 
             modelBuilder.Entity<Comment>(entity =>
