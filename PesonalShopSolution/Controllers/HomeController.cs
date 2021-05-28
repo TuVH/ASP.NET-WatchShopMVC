@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PesonalShopSolution.Controllers
@@ -131,7 +133,13 @@ namespace PesonalShopSolution.Controllers
                        from z in _context.Specification
                        where x.IdBrand == y.IdBrand && y.Id == z.IdProduct && y.Id == Id
                        select new { y.Id, y.Price, y.Image, y.ProductName,y.DetailDescription , z.Shape ,z.Material , z.Color , z.Gender ,z.Weight ,z.Warranty};
+
+            var list1 = (from x in _context.Product
+                       select x).Take(5);
+            
             ViewBag.list = list.ToArray();
+            ViewBag.list1 = list1.ToArray();
+            ViewBag.userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View();
         }
 
@@ -152,10 +160,30 @@ namespace PesonalShopSolution.Controllers
 
         public IActionResult Checkout()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var list = from x in _context.Product
+                       from y in _context.Cart
+                       from z in _context.Brand
+                       where x.Id == y.IdProduct && y.IdUser.ToString() == userId && z.IdBrand == x.IdBrand 
+                       select new { x.ProductName, x.Price,y.Amount,x.ProductCode, x.Image, z.BrandName };
+            ViewBag.list = list.ToArray();
+
             return View();
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Create([Bind("Id,IdProduct,IdUser,Amount")] Cart cart)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(cart);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Checkout));
+            }
+            return View();
+        }
+
+
+            public IActionResult Contact()
         {
             return View();
         }

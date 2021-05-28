@@ -88,8 +88,6 @@ namespace PesonalShopSolution.Areas.Admin.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.IdCartDetails).HasColumnName("id_cart_details");
-
                 entity.Property(e => e.IdProduct).HasColumnName("id_product");
 
                 entity.HasOne(d => d.IdProductNavigation)

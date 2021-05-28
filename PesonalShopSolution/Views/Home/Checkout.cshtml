@@ -20,56 +20,31 @@ $(document).ready(function(c) {
 					});
                 </script>
                 <div class="cart-header">
-                    <div class="close1"> </div>
-                    <div class="cart-sec simpleCart_shelfItem">
-                        <div class="cart-item cyc">
-                            <img src="~/user/images/m3.jpg" class="img-responsive" alt="" />
-                        </div>
-                        <div class="cart-item-info">
-                            <h3><a href="#">Mountain Hopper(XS R034)</a><span>Model No: 3578</span></h3>
-                            <ul class="qty">
-                                <li><p>Size : 5</p></li>
-                                <li><p>Qty : 1</p></li>
-                            </ul>
-                            <div class="delivery">
-                                <p>Service Charges : Rs.100.00</p>
-                                <span>Delivered in 2-3 business days</span>
-                                <div class="clearfix"></div>
+                    @foreach (var item in ViewBag.list)
+                    {
+                        <div class="close1"> </div>
+                        <div class="cart-sec simpleCart_shelfItem">
+                            <div class="cart-item cyc">
+                                <img src="~/admin/img/pro/@item.GetType().GetProperty("Image").GetValue(item, null)" class="img-responsive" alt="" />
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <script>
-$(document).ready(function(c) {
-					$('.close2').on('click', function(c){
-							$('.cart-header2').fadeOut('slow', function(c){
-						$('.cart-header2').remove();
-					});
-					});
-					});
-                </script>
-                <div class="cart-header2">
-                    <div class="close2"> </div>
-                    <div class="cart-sec simpleCart_shelfItem">
-                        <div class="cart-item cyc">
-                            <img src="~/user/images/m4.jpg" class="img-responsive" alt="" />
-                        </div>
-                        <div class="cart-item-info">
-                            <h3><a href="#">Mountain Hopper(XS R034)</a><span>Model No: 3578</span></h3>
-                            <ul class="qty">
-                                <li><p>Size : 5</p></li>
-                                <li><p>Qty : 1</p></li>
-                            </ul>
-                            <div class="delivery">
-                                <p>Service Charges : Rs.100.00</p>
-                                <span>Delivered in 2-3 business days</span>
-                                <div class="clearfix"></div>
+                            <div class="cart-item-info">
+                                <h3><a href="#">@item.GetType().GetProperty("ProductName").GetValue(item, null)</a><span>Model No: @item.GetType().GetProperty("ProductCode").GetValue(item, null)</span></h3>
+                                <ul class="qty">
+                                    <li><p>Hãng sản xuất : @item.GetType().GetProperty("BrandName").GetValue(item, null)</p></li>
+                                    <li><p>Số lượng : @item.GetType().GetProperty("Amount").GetValue(item, null)</p></li>
+                                </ul>
+                                <div class="delivery">
+                                    <p>@item.GetType().GetProperty("Price").GetValue(item, null) ₫</p>
+                                    <span>Delivered in 2-3 business days</span>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="clearfix"></div>
+                    }
                     </div>
-                </div>
+      
+
             </div>
             <div class="col-md-3 cart-total">
                 <a class="continue" href="#">Continue to basket</a>

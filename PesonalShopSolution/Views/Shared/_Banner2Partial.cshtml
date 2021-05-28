@@ -24,10 +24,7 @@
                     </select>
                 </div>
                 <ul class="header_user_info">
-                    <a class="login" asp-controller="Home" asp-action="Login">
-                        <i class="user"> </i>
-                        <li class="user_desc">My Account</li>
-                    </a>
+                    @await Html.PartialAsync("_LoginPartial.cshtml")
                     <div class="clearfix"> </div>
                 </ul>
                 <!-- start search-->
