@@ -128,7 +128,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.IdOrderDetails).HasColumnName("id_order_details");
+               
 
                 entity.Property(e => e.IdUser)
                     .HasColumnName("id_user")
@@ -138,10 +138,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
                     .HasColumnName("Order_date")
                     .HasColumnType("datetime");
 
-                entity.HasOne(d => d.IdOrderDetailsNavigation)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.IdOrderDetails)
-                    .HasConstraintName("FK_Order_Order_details");
+                
 
                 entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.Order)
@@ -156,6 +153,13 @@ namespace PesonalShopSolution.Areas.Admin.Data
                 entity.ToTable("Order_details");
 
                 entity.Property(e => e.IdOrderDetails).HasColumnName("id_order_details");
+
+                entity.Property(e => e.IdOrder).HasColumnName("id_order");
+
+                entity.HasOne(d => d.IdOrdersNavigation)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.IdOrder)
+                    .HasConstraintName("FK_Order_details_Order");
 
                 entity.Property(e => e.Amount)
                     .HasMaxLength(10)

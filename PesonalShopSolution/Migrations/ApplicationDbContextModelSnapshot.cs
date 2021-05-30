@@ -306,10 +306,6 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("IdOrderDetails")
-                        .HasColumnName("id_order_details")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdUser")
                         .HasColumnName("id_user")
                         .HasColumnType("int")
@@ -319,9 +315,10 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnName("Order_date")
                         .HasColumnType("datetime");
 
-                    b.HasKey("Id");
+                    b.Property<int>("TotalMoney")
+                        .HasColumnType("int");
 
-                    b.HasIndex("IdOrderDetails");
+                    b.HasKey("Id");
 
                     b.HasIndex("IdUser");
 
@@ -347,11 +344,17 @@ namespace PesonalShopSolution.Migrations
                         .IsFixedLength(true)
                         .HasMaxLength(10);
 
+                    b.Property<int>("IdOrder")
+                        .HasColumnName("id_order")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdProduct")
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
                     b.HasKey("IdOrderDetails");
+
+                    b.HasIndex("IdOrder");
 
                     b.HasIndex("IdProduct");
 
@@ -535,11 +538,6 @@ namespace PesonalShopSolution.Migrations
 
             modelBuilder.Entity("PesonalShopSolution.Areas.Admin.Models.Order", b =>
                 {
-                    b.HasOne("PesonalShopSolution.Areas.Admin.Models.OrderDetails", "IdOrderDetailsNavigation")
-                        .WithMany("Order")
-                        .HasForeignKey("IdOrderDetails")
-                        .HasConstraintName("FK_Order_Order_details");
-
                     b.HasOne("PesonalShopSolution.Areas.Admin.Models.AspNetUsers", "IdUserNavigation")
                         .WithMany("Order")
                         .HasForeignKey("IdUser")
@@ -550,6 +548,13 @@ namespace PesonalShopSolution.Migrations
 
             modelBuilder.Entity("PesonalShopSolution.Areas.Admin.Models.OrderDetails", b =>
                 {
+                    b.HasOne("PesonalShopSolution.Areas.Admin.Models.Order", "IdOrdersNavigation")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("IdOrder")
+                        .HasConstraintName("FK_Order_details_Order")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PesonalShopSolution.Areas.Admin.Models.Product", "IdProductNavigation")
                         .WithMany("OrderDetails")
                         .HasForeignKey("IdProduct")

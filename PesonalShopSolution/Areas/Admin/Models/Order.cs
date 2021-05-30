@@ -12,9 +12,9 @@ namespace PesonalShopSolution.Areas.Admin.Models
         public int Id { get; set; }
         public DateTime? OrderDate { get; set; }
         public int IdUser { get; set; }
-        public int? IdOrderDetails { get; set; }
+        public int TotalMoney { get; set; }
 
-        public virtual OrderDetails IdOrderDetailsNavigation { get; set; }
         public virtual AspNetUsers IdUserNavigation { get; set; }
+        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
 }

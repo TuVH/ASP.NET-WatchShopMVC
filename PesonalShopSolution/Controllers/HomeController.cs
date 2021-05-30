@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PesonalShopSolution.Areas.Admin.Data;
 using PesonalShopSolution.Areas.Admin.Models;
@@ -31,6 +32,7 @@ namespace PesonalShopSolution.Controllers
 
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var list = from x in _context.Brand
                        from y in _context.Product
                        from z in _context.Specification
@@ -43,8 +45,20 @@ namespace PesonalShopSolution.Controllers
                        where x.IdBrand == y.IdBrand && y.Id == z.IdProduct && z.Gender == "Female"
                        select new { y.Id, y.Price, y.Image, y.ProductName };
 
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+
             ViewBag.list = list.ToArray();
             ViewBag.list2 = list2.ToArray();
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
 
             return View();
         }
@@ -128,6 +142,7 @@ namespace PesonalShopSolution.Controllers
       
         public IActionResult Single(int Id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var list = from x in _context.Brand
                        from y in _context.Product
                        from z in _context.Specification
@@ -136,25 +151,73 @@ namespace PesonalShopSolution.Controllers
 
             var list1 = (from x in _context.Product
                        select x).Take(5);
-            
+
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+
             ViewBag.list = list.ToArray();
             ViewBag.list1 = list1.ToArray();
             ViewBag.userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
         public IActionResult Privacy()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
         public IActionResult Erorr()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
         public IActionResult Brands()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
@@ -165,15 +228,43 @@ namespace PesonalShopSolution.Controllers
                        from y in _context.Cart
                        from z in _context.Brand
                        where x.Id == y.IdProduct && y.IdUser.ToString() == userId && z.IdBrand == x.IdBrand 
-                       select new { x.ProductName, x.Price,y.Amount,x.ProductCode, x.Image, z.BrandName };
-            ViewBag.list = list.ToArray();
+                       select new { x.ProductName, x.Price,y.Amount,x.ProductCode, x.Image, z.BrandName , y.Id , Total = y.Amount * x.Price };
 
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var sum2 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum()+25000;
+
+            var count = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct && y.IdUser.ToString() == userId 
+                        select y.IdUser).Count();
+
+            ViewBag.list = list.ToArray();
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.sum2 = sum2.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
-        public async Task<IActionResult> Create([Bind("Id,IdProduct,IdUser,Amount")] Cart cart)
+        public async Task<IActionResult> CreateCart( [Bind("Id,IdProduct,IdUser,Amount")] Cart cart, Cart cart1)
         {
-            if (ModelState.IsValid)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var child = _context.Cart
+                      .Where(p => p.IdProduct == cart.IdProduct) 
+                      .Where(p => p.IdUser == cart.IdUser)
+                      .FirstOrDefault();
+            if (userId == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            else
             {
                 _context.Add(cart);
                 await _context.SaveChangesAsync();
@@ -183,8 +274,32 @@ namespace PesonalShopSolution.Controllers
         }
 
 
-            public IActionResult Contact()
+ 
+        public async Task<IActionResult> DeleteProductCart(int id)
         {
+            var cart = await _context.Cart.FindAsync(id);
+            _context.Cart.Remove(cart);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Checkout));
+        }
+
+
+
+        public IActionResult Contact()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sum1 = (from x in _context.Product
+                        from y in _context.Cart
+                        where x.Id == y.IdProduct
+                        select (y.Amount * x.Price)).Sum();
+
+            var count = (from x in _context.Product
+                         from y in _context.Cart
+                         where x.Id == y.IdProduct && y.IdUser.ToString() == userId
+                         select y.IdUser).Count();
+
+            ViewBag.sum1 = sum1.ToString();
+            ViewBag.count = count.ToString();
             return View();
         }
 
@@ -192,6 +307,11 @@ namespace PesonalShopSolution.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private bool CarttExists(int? id)
+        {
+            return _context.Cart.Any(e => e.IdProduct == id);
         }
     }
 }
