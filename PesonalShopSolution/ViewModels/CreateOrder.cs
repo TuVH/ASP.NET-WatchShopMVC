@@ -10,5 +10,10 @@ namespace PesonalShopSolution.ViewModels
         public DateTime? OrderDate { get; set; }
         public int IdUser { get; set; }
         public int TotalMoney { get; set; }
+
+        public int IdOrder { get; set; }
+        public string Amount { get; set; }
+        public string DiscountCode { get; set; }
+        public int? IdProduct { get; set; }
     }
 }

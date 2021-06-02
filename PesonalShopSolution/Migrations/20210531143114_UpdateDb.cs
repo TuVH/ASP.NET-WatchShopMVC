@@ -170,81 +170,45 @@ namespace PesonalShopSolution.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Specification",
-                columns: table => new
-                {
-                    id_specifications = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    id_brand = table.Column<int>(nullable: true),
-                    Shape = table.Column<string>(maxLength: 50, nullable: true),
-                    Gender = table.Column<string>(maxLength: 50, nullable: true),
-                    Colour = table.Column<string>(maxLength: 50, nullable: true),
-                    Material = table.Column<string>(maxLength: 50, nullable: true),
-                    Weight = table.Column<string>(maxLength: 50, nullable: true),
-                    Warranty = table.Column<string>(maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Specification", x => x.id_specifications);
-                    table.ForeignKey(
-                        name: "FK_Specification_Trademark",
-                        column: x => x.id_brand,
-                        principalTable: "Brand",
-                        principalColumn: "id_brand",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Order",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    product_code = table.Column<int>(nullable: true),
-                    product_name = table.Column<string>(maxLength: 50, nullable: true),
-                    Detail_description = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    id_specifications = table.Column<int>(nullable: true),
-                    id_brand = table.Column<int>(nullable: true),
-                    Evaluate = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Image = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    Price = table.Column<int>(nullable: true)
+                    Order_date = table.Column<DateTime>(type: "datetime", nullable: true),
+                    id_user = table.Column<int>(maxLength: 128, nullable: false),
+                    TotalMoney = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.id);
+                    table.PrimaryKey("PK_Order", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Product_Trademark",
-                        column: x => x.id_brand,
-                        principalTable: "Brand",
-                        principalColumn: "id_brand",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Product_Specification",
-                        column: x => x.id_specifications,
-                        principalTable: "Specification",
-                        principalColumn: "id_specifications",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Order_AspNetUsers",
+                        column: x => x.id_user,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cart_details",
+                name: "Cart",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<int>(nullable: true),
                     id_product = table.Column<int>(nullable: true),
-                    Total_money = table.Column<string>(maxLength: 50, nullable: true)
+                    IdUser = table.Column<int>(nullable: false),
+                    Amount = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cart_details", x => x.id);
+                    table.PrimaryKey("PK_Cart", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Cart_details_Product",
-                        column: x => x.id_product,
-                        principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Cart_AspNetUsers",
+                        column: x => x.IdUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,12 +225,6 @@ namespace PesonalShopSolution.Migrations
                 {
                     table.PrimaryKey("PK_Comment", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Comment_Product",
-                        column: x => x.id_product,
-                        principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Comment_AspNetUsers",
                         column: x => x.id_user,
                         principalTable: "AspNetUsers",
@@ -275,11 +233,38 @@ namespace PesonalShopSolution.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    product_code = table.Column<int>(nullable: true),
+                    product_name = table.Column<string>(maxLength: 50, nullable: true),
+                    Detail_description = table.Column<string>(maxLength: 5000, nullable: true),
+                    id_brand = table.Column<int>(nullable: true),
+                    Evaluate = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Image = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
+                    Price = table.Column<int>(nullable: true),
+                    SpecificationIdSpecifications = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Product_Trademark",
+                        column: x => x.id_brand,
+                        principalTable: "Brand",
+                        principalColumn: "id_brand",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Order_details",
                 columns: table => new
                 {
                     id_order_details = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    id_order = table.Column<int>(nullable: false),
                     Amount = table.Column<string>(fixedLength: true, maxLength: 10, nullable: true),
                     Discount_code = table.Column<string>(fixedLength: true, maxLength: 10, nullable: true),
                     id_product = table.Column<int>(nullable: true)
@@ -287,6 +272,12 @@ namespace PesonalShopSolution.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order_details", x => x.id_order_details);
+                    table.ForeignKey(
+                        name: "FK_Order_details_Order",
+                        column: x => x.id_order,
+                        principalTable: "Order",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Order_details_Product",
                         column: x => x.id_product,
@@ -296,56 +287,28 @@ namespace PesonalShopSolution.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cart",
+                name: "Specification",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    id_specifications = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     id_product = table.Column<int>(nullable: true),
-                    id_cart_details = table.Column<int>(nullable: true)
+                    Shape = table.Column<string>(maxLength: 50, nullable: true),
+                    Gender = table.Column<string>(maxLength: 50, nullable: true),
+                    Color = table.Column<string>(maxLength: 50, nullable: true),
+                    Material = table.Column<string>(maxLength: 50, nullable: true),
+                    Weight = table.Column<string>(maxLength: 50, nullable: true),
+                    Warranty = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cart", x => x.id);
+                    table.PrimaryKey("PK_Specification", x => x.id_specifications);
                     table.ForeignKey(
-                        name: "FK_Cart_Cart_details",
-                        column: x => x.id_cart_details,
-                        principalTable: "Cart_details",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Cart_Product",
+                        name: "FK_Specification_Product",
                         column: x => x.id_product,
                         principalTable: "Product",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Order_date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    id_user = table.Column<int>(maxLength: 128, nullable: false),
-                    id_order_details = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Order_Order_details",
-                        column: x => x.id_order_details,
-                        principalTable: "Order_details",
-                        principalColumn: "id_order_details",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Order_AspNetUsers",
-                        column: x => x.id_user,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -388,19 +351,14 @@ namespace PesonalShopSolution.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_id_cart_details",
-                table: "Cart",
-                column: "id_cart_details");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cart_id_product",
                 table: "Cart",
                 column: "id_product");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_details_id_product",
-                table: "Cart_details",
-                column: "id_product");
+                name: "IX_Cart_IdUser",
+                table: "Cart",
+                column: "IdUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_id_product",
@@ -413,14 +371,14 @@ namespace PesonalShopSolution.Migrations
                 column: "id_user");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_id_order_details",
-                table: "Order",
-                column: "id_order_details");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Order_id_user",
                 table: "Order",
                 column: "id_user");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_details_id_order",
+                table: "Order_details",
+                column: "id_order");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_details_id_product",
@@ -433,18 +391,46 @@ namespace PesonalShopSolution.Migrations
                 column: "id_brand");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_id_specifications",
+                name: "IX_Product_SpecificationIdSpecifications",
                 table: "Product",
-                column: "id_specifications");
+                column: "SpecificationIdSpecifications");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Specification_id_brand",
+                name: "IX_Specification_id_product",
                 table: "Specification",
-                column: "id_brand");
+                column: "id_product");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Cart_Product",
+                table: "Cart",
+                column: "id_product",
+                principalTable: "Product",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comment_Product",
+                table: "Comment",
+                column: "id_product",
+                principalTable: "Product",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Product_Specification_SpecificationIdSpecifications",
+                table: "Product",
+                column: "SpecificationIdSpecifications",
+                principalTable: "Specification",
+                principalColumn: "id_specifications",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Specification_Product",
+                table: "Specification");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaim");
 
@@ -467,16 +453,13 @@ namespace PesonalShopSolution.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Order_details");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Cart_details");
-
-            migrationBuilder.DropTable(
-                name: "Order_details");
+                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
@@ -485,10 +468,10 @@ namespace PesonalShopSolution.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Specification");
+                name: "Brand");
 
             migrationBuilder.DropTable(
-                name: "Brand");
+                name: "Specification");
         }
     }
 }

@@ -5,6 +5,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
+@model PesonalShopSolution.ViewModels.CreateOrder
 
 <div class="account-in">
     <div class="container">
@@ -15,7 +16,7 @@
                 {
                     <div class="cart-header">
 
-                        <a asp-controller="Home" asp-action="DeleteProductCart" asp-route-id="@item.GetType().GetProperty("Id").GetValue(item, null)"><div class="close1"></div></a>
+                        <a asp-controller="Home" asp-action="DeleteCart" asp-route-id="@item.GetType().GetProperty("Id").GetValue(item, null)"><div class="close1"></div></a>
                         <div class="cart-sec simpleCart_shelfItem">
                             <div class="cart-item cyc">
                                 <img src="~/admin/img/pro/@item.GetType().GetProperty("Image").GetValue(item, null)" class="img-responsive" alt="" />
@@ -42,29 +43,39 @@
 
             </div>
             <div class="col-md-3 cart-total">
-                <a class="order" href="#"> Chi tiết hóa đơn </a>
-                <div class="price-details">
-                    <span>Tổng tiền</span>
-                    <span class="total1">@ViewBag.sum1 ₫</span>
-                    <span>Giảm giá</span>
-                    <span class="total1">---</span>
-                    <span>Phí vận chuyển :</span>
-                    <span class="total1">25000 ₫</span>
+                <form asp-action="CreateOrder" asp-controller="Home">
+
+                    <a class="order" href="#"> Chi tiết hóa đơn </a>
+                    <div class="price-details">
+                        <span>Tổng tiền</span>
+                        <span class="total1">@ViewBag.sum1 ₫</span>
+                        <span>Giảm giá</span>
+                        <span class="total1">---</span>
+                        <span>Phí vận chuyển :</span>
+                        <span class="total1">25000 ₫</span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <input type="hidden" class='form-control' asp-for="TotalMoney" value="@ViewBag.sum2" required>
+                    @foreach (var item in ViewBag.list)
+                    {
+                        <input type="hidden" class='form-control' asp-for="Amount" value="@item.GetType().GetProperty("Amount").GetValue(item, null)" required>
+                        <input type="hidden" class='form-control' asp-for="IdProduct" value="@item.GetType().GetProperty("IdProduct").GetValue(item, null)" required>
+
+                    }
+                    <ul class="total_price">
+                        <li class="last_price"> <h4>Thành tiền</h4></li>
+                        <li class="last_price"><span>@ViewBag.sum2 ₫</span></li>
+                        <div class="clearfix"> </div>
+                    </ul>
                     <div class="clearfix"></div>
-                </div>
-                <ul class="total_price">
-                    <li class="last_price"> <h4>Thành tiền</h4></li>
-                    <li class="last_price"><span>@ViewBag.sum2 ₫</span></li>
-                    <div class="clearfix"> </div>
-                </ul>
-                <div class="clearfix"></div>
-                <a class="order" href="#">Đặt hàng</a>
-                <div class="total-item">
-                    <h3>Nhập mã giảm giá</h3>
-                    <h4>COUPONS</h4>
-                    <a class="cpns" href="#">Thêm Coupons</a>
-                    <p><a href="#">Log In</a> to use accounts - linked coupons</p>
-                </div>
+                    <button class="order" type="submit">Đặt hàng</button>
+                    <div class="total-item">
+                        <h3>Nhập mã giảm giá</h3>
+                        <h4>COUPONS</h4>
+                        <a class="cpns" href="#">Thêm Coupons</a>
+                        <p><a href="#">Log In</a> to use accounts - linked coupons</p>
+                    </div>
+                </form>
             </div>
             <div class="clearfix"></div>
         </div>
