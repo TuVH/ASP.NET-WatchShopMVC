@@ -8,11 +8,18 @@
         <div class="header_top">
             <div class="header_top_left">
                 <div class="box_11">
-                    <a href="checkout.html">
-                        <h4><p>Cart: <span class="simpleCart_total"></span> (<span id="simpleCart_quantity" class="simpleCart_quantity"></span> items)</p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                    <a asp-controller="Home" asp-action="Checkout">
+                        @if (@User.Identity.Name == null)
+                        {
+                            <h4><p>Cart:  ₫</p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                        }
+                        else
+                        {
+                            <h4><p>Giỏ hàng đang có :   @ViewBag.count  sản phẩm </p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                        }
                     </a>
                 </div>
-                <p class="empty"><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
+                
                 <div class="clearfix"> </div>
             </div>
             <div class="header_top_right">
@@ -24,10 +31,7 @@
                     </select>
                 </div>
                 <ul class="header_user_info">
-                    <a class="login" asp-controller="Home" asp-action="Login">
-                        <i class="user"> </i>
-                        <li class="user_desc">My Account</li>
-                    </a>
+                    @await Html.PartialAsync("_LoginPartial.cshtml")
                     <div class="clearfix"> </div>
                 </ul>
                 <!-- start search-->

@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20210518145506_Updatedatabase.cs" />
-    <Compile Remove="Migrations\20210518145506_Updatedatabase.Designer.cs" />
-    <Compile Remove="Migrations\20210518145553_UpdateDb.cs" />
-    <Compile Remove="Migrations\20210518145553_UpdateDb.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.15" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />

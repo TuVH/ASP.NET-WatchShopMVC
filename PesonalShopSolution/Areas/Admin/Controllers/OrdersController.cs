@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,23 +11,23 @@ using PesonalShopSolution.Areas.Admin.Models;
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = "Admin")]
-    public class BrandsController : Controller
+    public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public BrandsController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Brands
+        // GET: Admin/Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Brand.ToListAsync());
+            var applicationDbContext = _context.Order.Include(o => o.IdUserNavigation);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/Brands/Details/5
+        // GET: Admin/Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,39 +35,42 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brand
-                .FirstOrDefaultAsync(m => m.IdBrand == id);
-            if (brand == null)
+            var order = await _context.Order
+                .Include(o => o.IdUserNavigation)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(brand);
+            return View(order);
         }
 
-        // GET: Admin/Brands/Create
+        // GET: Admin/Orders/Create
         public IActionResult Create()
         {
+            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
             return View();
         }
 
-        // POST: Admin/Brands/Create
+        // POST: Admin/Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdBrand,BrandName")] Brand brand)
+        public async Task<IActionResult> Create([Bind("Id,OrderDate,IdUser,TotalMoney")] Order order)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(brand);
+                _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(brand);
+            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", order.IdUser);
+            return View(order);
         }
 
-        // GET: Admin/Brands/Edit/5
+        // GET: Admin/Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +78,23 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brand.FindAsync(id);
-            if (brand == null)
+            var order = await _context.Order.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(brand);
+            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", order.IdUser);
+            return View(order);
         }
 
-        // POST: Admin/Brands/Edit/5
+        // POST: Admin/Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdBrand,BrandName")] Brand brand)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,IdUser,TotalMoney")] Order order)
         {
-            if (id != brand.IdBrand)
+            if (id != order.Id)
             {
                 return NotFound();
             }
@@ -100,12 +103,12 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(brand);
+                    _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrandExists(brand.IdBrand))
+                    if (!OrderExists(order.Id))
                     {
                         return NotFound();
                     }
@@ -116,10 +119,11 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(brand);
+            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", order.IdUser);
+            return View(order);
         }
 
-        // GET: Admin/Brands/Delete/5
+        // GET: Admin/Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,30 +131,31 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var brand = await _context.Brand
-                .FirstOrDefaultAsync(m => m.IdBrand == id);
-            if (brand == null)
+            var order = await _context.Order
+                .Include(o => o.IdUserNavigation)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(brand);
+            return View(order);
         }
 
-        // POST: Admin/Brands/Delete/5
+        // POST: Admin/Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var brand = await _context.Brand.FindAsync(id);
-            _context.Brand.Remove(brand);
+            var order = await _context.Order.FindAsync(id);
+            _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BrandExists(int id)
+        private bool OrderExists(int id)
         {
-            return _context.Brand.Any(e => e.IdBrand == id);
+            return _context.Order.Any(e => e.Id == id);
         }
     }
 }

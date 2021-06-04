@@ -8,42 +8,52 @@
 <div class="main">
     <div class="container">
         <ul class="content-home">
-            <li class="col-sm-4">
-                <a asp-controller="Home" asp-action="Single" class="item-link" title="">
-                    <div class="bannerBox">
-                        <img src="~/user/images/w1.jpg" class="item-img" title="" alt="" width="100%" height="100%">
-                        <div class="item-html">
-                            <h3>Men's<span>Watches</span></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                            <button>Shop now!</button>
+            <center>
+                <h2><b class="b-index">Danh sách các sản phẩm của WATCH-SHOP  : </b></h2>
+            </center>
+            <h2 style="color:brown"><b>Men :</b></h2>
+            @foreach (var item in ViewBag.list)
+            {
+                <li class="col-sm-4">
+                    <a asp-controller="Home" asp-action="Single" asp-route-id="@item.GetType().GetProperty("Id").GetValue(item, null)" class="item-link" title="" style="text-decoration: none">
+                        <div class="bannerBox" title="" alt="" width="200px" height="300px">
+                            <img src="~/admin/img/pro/@item.GetType().GetProperty("Image").GetValue(item, null)" class="item-img">
                         </div>
-                    </div>
-                </a>
-            </li>
-            <li class="col-sm-4">
-                <a asp-controller="Home" asp-action="Single" class="item-link" title="">
-                    <div class="bannerBox">
-                        <img src="~/user/images/w3.jpg" class="item-img" title="" alt="" width="100%" height="100%">
-                        <div class="item-html">
-                            <h3>Men's<span>Watches</span></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                            <button>Shop now!</button>
+                        <center>
+                            <div>
+                                <h3><b>@item.GetType().GetProperty("ProductName").GetValue(item, null)</b></h3>
+                                <h4><b>@item.GetType().GetProperty("Price").GetValue(item, null) ₫</b></h4>
+                                <button class="favorite styled" type="button">
+                                    Add Cart Now !
+                                </button>
+                            </div>
+                        </center>
+                    </a>
+                </li>
+            }
+            <div class="clearfix"> </div>
+        </ul>
+        <ul class="content-home">
+            <h2 style="color:brown"><b>Woment :</b></h2>
+            @foreach (var item in ViewBag.list2)
+            {
+                <li class="col-sm-4">
+                    <a asp-controller="Home" asp-action="Single" asp-route-id="@item.GetType().GetProperty("Id").GetValue(item, null)" class="item-link" title="" style="text-decoration: none">
+                        <div class="bannerBox" title="" alt="" width="200px" height="300px">
+                            <img src="~/admin/img/pro/@item.GetType().GetProperty("Image").GetValue(item, null)" class="item-img">
                         </div>
-                    </div>
-                </a>
-            </li>
-            <li class="col-sm-4">
-                <a asp-controller="Home" asp-action="Single" class="item-link" title="">
-                    <div class="bannerBox">
-                        <img src="~/user/images/w2.jpg" class="item-img" title="" alt="" width="100%" height="100%">
-                        <div class="item-html">
-                            <h3>Women's<span>Watches</span></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                            <button>Shop now!</button>
-                        </div>
-                    </div>
-                </a>
-            </li>
+                        <center>
+                            <div>
+                                <h3><b>@item.GetType().GetProperty("ProductName").GetValue(item, null)</b></h3>
+                                <h4><b>@item.GetType().GetProperty("Price").GetValue(item, null) ₫</b></h4>
+                                <button class="favorite styled" type="button">
+                                    Add Cart Now !
+                                </button>
+                            </div>
+                        </center>
+                    </a>
+                </li>
+            }
             <div class="clearfix"> </div>
         </ul>
     </div>

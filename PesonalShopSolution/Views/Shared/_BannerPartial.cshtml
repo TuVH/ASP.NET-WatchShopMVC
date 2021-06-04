@@ -9,10 +9,18 @@
             <div class="header_top_left">
                 <div class="box_11">
                     <a asp-controller="Home" asp-action="Checkout">
-                        <h4><p>Cart: <span class="simpleCart_total"></span> (<span id="simpleCart_quantity" class="simpleCart_quantity"></span> items)</p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                        @if (@User.Identity.Name == null)
+                        {
+                            <h4><p>Cart:  ₫</p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                        }
+                        else
+                        {
+                            <h4><p>Giỏ hàng đang có :   @ViewBag.count  sản phẩm </p><img src="~/user/images/bag.png" alt="" /><div class="clearfix"> </div></h4>
+                        }
+
                     </a>
                 </div>
-                <p class="empty"><a href="javascript:;" class="simpleCart_empty">Empty Cart</a></p>
+                
                 <div class="clearfix"> </div>
             </div>
             <div class="header_top_right">
@@ -41,7 +49,7 @@
                 <script src="js/classie1.js"></script>
                 <script src="js/uisearch.js"></script>
                 <script>
-                        new UISearch(document.getElementById('sb-search'));
+                    new UISearch(document.getElementById('sb-search'));
                 </script>
                 <!----//search-scripts---->
                 <div class="clearfix"> </div>
