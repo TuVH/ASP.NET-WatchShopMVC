@@ -375,7 +375,7 @@ namespace PesonalShopSolution.Controllers
                 
                 _context.Add(orderDetails);
                 await _context.SaveChangesAsync();
-                DeleteProductCart(order.IdUser);
+                await DeleteProductCart(order.IdUser);
                 return RedirectToAction(nameof(Index));
             }
             return View(order);
@@ -392,14 +392,16 @@ namespace PesonalShopSolution.Controllers
 
 
         public async Task<IActionResult> DeleteProductCart(int id)
-        { 
+        {
 
             var child = _context.Cart
-                     .Where(m => m.IdUser == id)
-                     .FirstOrDefault();
-
-            var cart = await _context.Cart.FindAsync(child.Id);
-            _context.Remove(cart);
+                     .Where(m => m.IdUser == id);
+                     
+            foreach (var item in child)
+            {
+                var cart = await _context.Cart.FindAsync(item.Id);
+                _context.Remove(cart);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Checkout));
         }
