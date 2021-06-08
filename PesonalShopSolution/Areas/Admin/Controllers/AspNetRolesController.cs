@@ -12,7 +12,7 @@ using PesonalShopSolution.Areas.Admin.Models;
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AspNetRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

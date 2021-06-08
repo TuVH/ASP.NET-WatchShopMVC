@@ -88,14 +88,17 @@ namespace PesonalShopSolution.Areas.Admin.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.IdCartDetails).HasColumnName("id_cart_details");
-
                 entity.Property(e => e.IdProduct).HasColumnName("id_product");
 
                 entity.HasOne(d => d.IdProductNavigation)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(d => d.IdProduct)
                     .HasConstraintName("FK_Cart_Product");
+
+                entity.HasOne(d => d.IdUserNavigation)
+                    .WithMany(p => p.Cart)
+                    .HasForeignKey(d => d.IdUser)
+                    .HasConstraintName("FK_Cart_AspNetUsers");
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -125,7 +128,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.IdOrderDetails).HasColumnName("id_order_details");
+               
 
                 entity.Property(e => e.IdUser)
                     .HasColumnName("id_user")
@@ -135,10 +138,7 @@ namespace PesonalShopSolution.Areas.Admin.Data
                     .HasColumnName("Order_date")
                     .HasColumnType("datetime");
 
-                entity.HasOne(d => d.IdOrderDetailsNavigation)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.IdOrderDetails)
-                    .HasConstraintName("FK_Order_Order_details");
+                
 
                 entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.Order)
@@ -153,6 +153,13 @@ namespace PesonalShopSolution.Areas.Admin.Data
                 entity.ToTable("Order_details");
 
                 entity.Property(e => e.IdOrderDetails).HasColumnName("id_order_details");
+
+                entity.Property(e => e.IdOrder).HasColumnName("id_order");
+
+                entity.HasOne(d => d.IdOrdersNavigation)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.IdOrder)
+                    .HasConstraintName("FK_Order_details_Order");
 
                 entity.Property(e => e.Amount)
                     .HasMaxLength(10)
@@ -177,8 +184,8 @@ namespace PesonalShopSolution.Areas.Admin.Data
 
                 entity.Property(e => e.DetailDescription)
                     .HasColumnName("Detail_description")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(5000);
+                    
 
                 entity.Property(e => e.Evaluate)
                     .HasMaxLength(50)

@@ -5,57 +5,105 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<!-- End Navbar -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <a asp-action="Index"><i class="fa fa-arrow-left" aria-hidden="true" style="font-size:30px"> Back </i></a>
+                </p>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Detail Product </h4>
+                    </div>
+                    <div class="card-body">
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DetailDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DetailDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Evaluate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Evaluate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdBrandNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdBrandNavigation.IdBrand)
-        </dd>
-    </dl>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="IdBrand" class="bmd-label-floating"><b>Brand :</b></label>
+                                    <select asp-for="IdBrand" class="form-control" asp-items="@(new SelectList(ViewBag.products,"IdBrand","BrandName"))"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="ProductCode" class="bmd-label-floating"><b>Product_Code :</b></label>
+                                    <input asp-for="ProductCode" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="ProductName" class="bmd-label-floating"><b>Product_Name :</b></label>
+                                    <input asp-for="ProductName" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="Price" class="bmd-label-floating"><b>Price :</b></label>
+                                    <input asp-for="Price" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="Evaluate" class="bmd-label-floating"><b>Evaluate :</b></label>
+                                    <input asp-for="Evaluate" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="DetailDescription" class="bmd-label-floating"><b>Description :</b></label>
+                                    <input asp-for="DetailDescription" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label asp-for="Image" class="bmd-label-floating"><b>Image :</b></label>
+                                <div class="form-group">
+                                    <img id="imgPre" style="width:800px ; height: 400px" src="~/admin/img/pro/@Model.Image" alt="no imge" class="img-thumbnail" />
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="ful" name="ful">
+                                    <label class="custom-file-label" for="ful">Choose file</label>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <input asp-for="Image" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function readURL(input, idImg) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(idImg).attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#ful").change(function () {
+            readURL(this, '#imgPre');
+        });
+    </script>
+
+}

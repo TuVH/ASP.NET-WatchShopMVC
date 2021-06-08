@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +14,7 @@ using PesonalShopSolution.Areas.Admin.Models;
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -42,14 +46,14 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.products = _context.Brand.ToList();
             return View(product);
         }
 
         // GET: Admin/Products/Create
         public IActionResult Create()
         {
-            ViewData["IdBrand"] = new SelectList(_context.Brand, "IdBrand", "IdBrand");
+            ViewBag.products = _context.Brand.ToList();
             return View();
         }
 
@@ -58,11 +62,21 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductCode,ProductName,DetailDescription,IdBrand,Evaluate,Image,Price")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,ProductCode,ProductName,DetailDescription,IdBrand,Evaluate,Image,Price")] Product product, IFormFile ful)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(product);
+                await _context.SaveChangesAsync();
+              
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/admin/img/pro", product.Id + "." + ful.FileName.Split(".")[ful.FileName.Split(".").Length - 1]);
+             
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await ful.CopyToAsync(stream);
+                }
+                product.Image = product.Id + "." + ful.FileName.Split(".")[ful.FileName.Split(".").Length - 1];
+                _context.Update(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -83,7 +97,7 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdBrand"] = new SelectList(_context.Brand, "IdBrand", "IdBrand", product.IdBrand);
+            ViewBag.products = _context.Brand.ToList();
             return View(product);
         }
 
@@ -92,7 +106,7 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductCode,ProductName,DetailDescription,IdBrand,Evaluate,Image,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductCode,ProductName,DetailDescription,IdBrand,Evaluate,Image,Price")] Product product, IFormFile ful)
         {
             if (id != product.Id)
             {
@@ -103,8 +117,25 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             {
                 try
                 {
+                    if (ful != null)
+                    {
+                        String editImg = product.Id + "." + ful.FileName.Split(".")[ful.FileName.Split(".").Length - 1];
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/admin/img/pro", product.Image);
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await ful.CopyToAsync(stream);
+                        }
+                        product.Image = editImg;
+
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {

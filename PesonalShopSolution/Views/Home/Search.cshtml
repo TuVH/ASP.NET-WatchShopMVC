@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="account-in">
+    <div class="container">
+        <div class="check_box">
+            <div class="col-md-9 cart-items">
+                <h1>Danh sách các sản phẩm đã tìm kiếm được :</h1>
+                <div class="cart-header">
+                    @foreach (var item in ViewBag.Search)
+                    {
+
+                        <div class="cart-sec simpleCart_shelfItem">
+                            <div class="cart-item cyc">
+                                <img src="~/admin/img/pro/@item.Image" class="img-responsive" alt="" />
+                            </div>
+                            <div class="cart-item-info">
+                                <h3><a asp-controller="Home" asp-action="Single" asp-route-id="@item.Id">@item.ProductName</a><span>Model No: @item.ProductCode</span></h3>
+                                <ul class="qty">
+                                    <li><p><b>Giá : </b> @item.Price ₫</p></li>
+                                </ul>
+                                <div class="delivery">
+                                    <span>Giao hàng nhanh chóng trong 2-3 ngày</span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-3 cart-total">
+                <a class="continue" href="#">Chương trình khuyến mãi</a>
+                <div class="price-details">
+                    <img src="~/admin/img/abc.jpg" class="img-responsive" alt="" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="total-item">
+                    <img src="~/admin/img/images.png" class="img-responsive" alt="" />
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978"> </iframe>
+        </div>
+    </div>
+    </div>
+</div>

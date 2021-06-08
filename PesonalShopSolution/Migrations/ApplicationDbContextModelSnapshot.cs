@@ -252,20 +252,18 @@ namespace PesonalShopSolution.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdCartDetails")
-                        .HasColumnName("id_cart_details")
-                        .HasColumnType("int");
-
                     b.Property<int?>("IdProduct")
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
-                    b.Property<string>("TotalMoney")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdProduct");
+
+                    b.HasIndex("IdUser");
 
                     b.ToTable("Cart");
                 });
@@ -308,22 +306,28 @@ namespace PesonalShopSolution.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("IdOrderDetails")
-                        .HasColumnName("id_order_details")
-                        .HasColumnType("int");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdUser")
                         .HasColumnName("id_user")
                         .HasColumnType("int")
                         .HasMaxLength(128);
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnName("Order_date")
                         .HasColumnType("datetime");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("IdOrderDetails");
+                    b.Property<int>("TotalMoney")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("IdUser");
 
@@ -349,11 +353,17 @@ namespace PesonalShopSolution.Migrations
                         .IsFixedLength(true)
                         .HasMaxLength(10);
 
+                    b.Property<int>("IdOrder")
+                        .HasColumnName("id_order")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdProduct")
                         .HasColumnName("id_product")
                         .HasColumnType("int");
 
                     b.HasKey("IdOrderDetails");
+
+                    b.HasIndex("IdOrder");
 
                     b.HasIndex("IdProduct");
 
@@ -370,9 +380,8 @@ namespace PesonalShopSolution.Migrations
 
                     b.Property<string>("DetailDescription")
                         .HasColumnName("Detail_description")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(5000);
 
                     b.Property<string>("Evaluate")
                         .HasColumnType("varchar(50)")
@@ -512,6 +521,13 @@ namespace PesonalShopSolution.Migrations
                         .WithMany("Cart")
                         .HasForeignKey("IdProduct")
                         .HasConstraintName("FK_Cart_Product");
+
+                    b.HasOne("PesonalShopSolution.Areas.Admin.Models.AspNetUsers", "IdUserNavigation")
+                        .WithMany("Cart")
+                        .HasForeignKey("IdUser")
+                        .HasConstraintName("FK_Cart_AspNetUsers")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PesonalShopSolution.Areas.Admin.Models.Comment", b =>
@@ -531,11 +547,6 @@ namespace PesonalShopSolution.Migrations
 
             modelBuilder.Entity("PesonalShopSolution.Areas.Admin.Models.Order", b =>
                 {
-                    b.HasOne("PesonalShopSolution.Areas.Admin.Models.OrderDetails", "IdOrderDetailsNavigation")
-                        .WithMany("Order")
-                        .HasForeignKey("IdOrderDetails")
-                        .HasConstraintName("FK_Order_Order_details");
-
                     b.HasOne("PesonalShopSolution.Areas.Admin.Models.AspNetUsers", "IdUserNavigation")
                         .WithMany("Order")
                         .HasForeignKey("IdUser")
@@ -546,6 +557,13 @@ namespace PesonalShopSolution.Migrations
 
             modelBuilder.Entity("PesonalShopSolution.Areas.Admin.Models.OrderDetails", b =>
                 {
+                    b.HasOne("PesonalShopSolution.Areas.Admin.Models.Order", "IdOrdersNavigation")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("IdOrder")
+                        .HasConstraintName("FK_Order_details_Order")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PesonalShopSolution.Areas.Admin.Models.Product", "IdProductNavigation")
                         .WithMany("OrderDetails")
                         .HasForeignKey("IdProduct")
