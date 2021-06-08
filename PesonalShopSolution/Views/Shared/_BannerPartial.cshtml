@@ -38,10 +38,10 @@
                 <!-- start search-->
                 <div class="search-box">
                     <div id="sb-search" class="sb-search">
-                        <form>
-                            <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search">
-                            <input class="sb-search-submit" type="submit" value="">
-                            <span class="sb-icon-search"> </span>
+                        <form asp-controller="Home" asp-action="Search" method="get">
+                            <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="searchString" id="search">
+                            <input class="sb-search-submit" name="searchString" type="submit" value="">
+                            <button type="submit"><span class="sb-icon-search"> </span></button>
                         </form>
                     </div>
                 </div>

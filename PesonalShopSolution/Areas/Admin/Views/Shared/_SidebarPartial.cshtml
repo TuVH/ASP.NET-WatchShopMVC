@@ -10,8 +10,8 @@
         Tip 2: you can also add an image using data-image tag
     -->
     <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-            Watches Shop 
+        <a asp-controller="Home" asp-action="Index" class="simple-text logo-normal">
+            <i class="fa fa-clock-o" aria-hidden="true"></i> Watches Shop 
         </a>
     </div>
     <div class="sidebar-wrapper">
@@ -23,7 +23,7 @@
                 </a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" asp-controller="AspNetRoles" asp-action="Index">
+                <a class="nav-link" asp-controller="Home" asp-action="UserProfile">
                     <i class="material-icons">person</i>
                     <p>User Profile</p>
                 </a>
@@ -36,34 +36,23 @@
             </li>
             <li class="nav-item ">
                 <a class="nav-link" asp-controller="Products" asp-action="Index">
-                    <i class="material-icons">library_books</i>
+                    <i class="fa fa-cube" aria-hidden="true"></i>
                     <p>Manage Products</p>
                 </a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" asp-controller="Specifications" asp-action="Index">
-                    <i class="material-icons">bubble_chart</i>
+                    <i class="fa fa-certificate" aria-hidden="true"></i>
                     <p>Manage Specifications</p>
                 </a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="./map.html">
-                    <i class="material-icons">location_ons</i>
-                    <p>Maps</p>
+                <a class="nav-link" asp-controller="Orders" asp-action="Index">
+                    <i class="fa fa-id-card" aria-hidden="true"></i>
+                    <p>Manage Orders</p>
                 </a>
             </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="./notifications.html">
-                    <i class="material-icons">notifications</i>
-                    <p>Notifications</p>
-                </a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="./rtl.html">
-                    <i class="material-icons">language</i>
-                    <p>RTL Support</p>
-                </a>
-            </li>
+  
             <li class="nav-item active-pro ">
                 <a class="nav-link" href="./upgrade.html">
                     <i class="material-icons">unarchive</i>

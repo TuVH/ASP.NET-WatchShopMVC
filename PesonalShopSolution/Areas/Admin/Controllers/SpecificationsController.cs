@@ -11,6 +11,7 @@ using PesonalShopSolution.Areas.Admin.Models;
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
+
     public class SpecificationsController : Controller
     {
         private readonly ApplicationDbContext _context;

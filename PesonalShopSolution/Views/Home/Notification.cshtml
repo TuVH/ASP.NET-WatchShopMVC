@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<center>
+    <img src="~/admin/img/screen.jpg" style="width:260px;height:310px;padding-top:75px" class="img-responsive" alt="" />
+    <h2 style="padding-top:10px;"><b>* Đơn hàng đã được xác nhận thành công *</b></h2>
+    <div style="padding-top:90px;padding-bottom:50px">
+        <a asp-action="Index" asp-controller="Home"><button class="favorite styled">Quay lại trang chủ</button></a>
+        <a asp-action="Index" asp-controller="Home"><button class="favorite styled">Tiếp tục mua hàng</button></a>
+    </div>
+</center>

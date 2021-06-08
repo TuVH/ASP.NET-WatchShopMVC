@@ -64,6 +64,27 @@ namespace PesonalShopSolution.Controllers
         }
 
 
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var Search = from m in _context.Product
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Search = Search.Where(s => s.ProductName.Contains(searchString));
+            }
+
+            ViewBag.Search = Search.ToArray();
+
+            return View(Search);
+        }
+
+
+        public IActionResult Notification()
+        {
+            return View();
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
@@ -379,7 +400,7 @@ namespace PesonalShopSolution.Controllers
                 _context.Add(orderDetails);
                 await _context.SaveChangesAsync();
                 await DeleteProductCart(order.IdUser);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Notification));
             }else if(!ModelState.IsValid)
             {
                 return RedirectToAction("Checkout", "Home");
@@ -393,7 +414,7 @@ namespace PesonalShopSolution.Controllers
             var cart = await _context.Cart.FindAsync(id);
             _context.Cart.Remove(cart);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Checkout));
         }
 
 
@@ -409,7 +430,7 @@ namespace PesonalShopSolution.Controllers
                 _context.Remove(cart);
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Checkout));
+            return RedirectToAction(nameof(Notification));
         }
        
 

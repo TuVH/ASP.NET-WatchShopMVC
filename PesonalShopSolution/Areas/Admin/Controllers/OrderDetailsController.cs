@@ -11,23 +11,24 @@ using PesonalShopSolution.Areas.Admin.Models;
 namespace PesonalShopSolution.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CartsController : Controller
+   
+    public class OrderDetailsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CartsController(ApplicationDbContext context)
+        public OrderDetailsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Carts
+        // GET: Admin/OrderDetails
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Cart.Include(c => c.IdProductNavigation).Include(c => c.IdUserNavigation);
+            var applicationDbContext = _context.OrderDetails.Include(o => o.IdOrdersNavigation).Include(o => o.IdProductNavigation);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/Carts/Details/5
+        // GET: Admin/OrderDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,45 +36,45 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Cart
-                .Include(c => c.IdProductNavigation)
-                .Include(c => c.IdUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cart == null)
+            var orderDetails = await _context.OrderDetails
+                .Include(o => o.IdOrdersNavigation)
+                .Include(o => o.IdProductNavigation)
+                .FirstOrDefaultAsync(m => m.IdOrderDetails == id);
+            if (orderDetails == null)
             {
                 return NotFound();
             }
 
-            return View(cart);
+            return View(orderDetails);
         }
 
-        // GET: Admin/Carts/Create
+        // GET: Admin/OrderDetails/Create
         public IActionResult Create()
         {
+            ViewData["IdOrder"] = new SelectList(_context.Order, "Id", "Id");
             ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id");
-            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id");
             return View();
         }
 
-        // POST: Admin/Carts/Create
+        // POST: Admin/OrderDetails/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdProduct,IdUser,Amount")] Cart cart)
+        public async Task<IActionResult> Create([Bind("IdOrderDetails,IdOrder,Amount,DiscountCode,IdProduct")] OrderDetails orderDetails)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cart);
+                _context.Add(orderDetails);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", cart.IdProduct);
-            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", cart.IdUser);
-            return View(cart);
+            ViewData["IdOrder"] = new SelectList(_context.Order, "Id", "Id", orderDetails.IdOrder);
+            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", orderDetails.IdProduct);
+            return View(orderDetails);
         }
 
-        // GET: Admin/Carts/Edit/5
+        // GET: Admin/OrderDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,24 +82,24 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Cart.FindAsync(id);
-            if (cart == null)
+            var orderDetails = await _context.OrderDetails.FindAsync(id);
+            if (orderDetails == null)
             {
                 return NotFound();
             }
-            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", cart.IdProduct);
-            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", cart.IdUser);
-            return View(cart);
+            ViewData["IdOrder"] = new SelectList(_context.Order, "Id", "Id", orderDetails.IdOrder);
+            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", orderDetails.IdProduct);
+            return View(orderDetails);
         }
 
-        // POST: Admin/Carts/Edit/5
+        // POST: Admin/OrderDetails/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdProduct,IdUser,Amount")] Cart cart)
+        public async Task<IActionResult> Edit(int id, [Bind("IdOrderDetails,IdOrder,Amount,DiscountCode,IdProduct")] OrderDetails orderDetails)
         {
-            if (id != cart.Id)
+            if (id != orderDetails.IdOrderDetails)
             {
                 return NotFound();
             }
@@ -107,12 +108,12 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(cart);
+                    _context.Update(orderDetails);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CartExists(cart.Id))
+                    if (!OrderDetailsExists(orderDetails.IdOrderDetails))
                     {
                         return NotFound();
                     }
@@ -123,12 +124,12 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", cart.IdProduct);
-            ViewData["IdUser"] = new SelectList(_context.AspNetUsers, "Id", "Id", cart.IdUser);
-            return View(cart);
+            ViewData["IdOrder"] = new SelectList(_context.Order, "Id", "Id", orderDetails.IdOrder);
+            ViewData["IdProduct"] = new SelectList(_context.Product, "Id", "Id", orderDetails.IdProduct);
+            return View(orderDetails);
         }
 
-        // GET: Admin/Carts/Delete/5
+        // GET: Admin/OrderDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,32 +137,32 @@ namespace PesonalShopSolution.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Cart
-                .Include(c => c.IdProductNavigation)
-                .Include(c => c.IdUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cart == null)
+            var orderDetails = await _context.OrderDetails
+                .Include(o => o.IdOrdersNavigation)
+                .Include(o => o.IdProductNavigation)
+                .FirstOrDefaultAsync(m => m.IdOrderDetails == id);
+            if (orderDetails == null)
             {
                 return NotFound();
             }
 
-            return View(cart);
+            return View(orderDetails);
         }
 
-        // POST: Admin/Carts/Delete/5
+        // POST: Admin/OrderDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cart = await _context.Cart.FindAsync(id);
-            _context.Cart.Remove(cart);
+            var orderDetails = await _context.OrderDetails.FindAsync(id);
+            _context.OrderDetails.Remove(orderDetails);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CartExists(int id)
+        private bool OrderDetailsExists(int id)
         {
-            return _context.Cart.Any(e => e.Id == id);
+            return _context.OrderDetails.Any(e => e.IdOrderDetails == id);
         }
     }
 }

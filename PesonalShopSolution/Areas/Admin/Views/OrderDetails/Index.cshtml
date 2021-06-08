@@ -1,8 +1,8 @@
-﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.Cart>
+﻿@model IEnumerable<PesonalShopSolution.Areas.Admin.Models.OrderDetails>
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -17,10 +17,13 @@
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DiscountCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IdProductNavigation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdUserNavigation)
+                @Html.DisplayNameFor(model => model.IdOrdersNavigation)
             </th>
             <th></th>
         </tr>
@@ -32,15 +35,18 @@
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DiscountCode)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.IdProductNavigation.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdUserNavigation.Id)
+                @Html.DisplayFor(modelItem => item.IdOrdersNavigation.Id)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdOrderDetails">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdOrderDetails">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdOrderDetails">Delete</a>
             </td>
         </tr>
 }
