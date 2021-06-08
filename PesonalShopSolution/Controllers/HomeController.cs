@@ -335,7 +335,7 @@ namespace PesonalShopSolution.Controllers
 
 
 
-        public async Task<IActionResult> CreateOrder([Bind("Id,OrderDate,IdUser,TotalMoney,IdOrder,Amount,DiscountCode,IdProduct")] CreateOrder createOrder, Order order ,OrderDetails orderDetails)
+        public async Task<IActionResult> CreateOrder([Bind("Id,OrderDate,IdUser,TotalMoney,IdOrder,Amount,DiscountCode,IdProduct,Phone,Address,Name")] CreateOrder createOrder, Order order ,OrderDetails orderDetails)
         {
             if (ModelState.IsValid)
             {
@@ -343,12 +343,15 @@ namespace PesonalShopSolution.Controllers
                 var aspNetUsers = await _context.AspNetUsers
                             .FirstOrDefaultAsync(m => m.Id.ToString() == id);
 
-                
+
                 order = new Order
                 {
                     IdUser = aspNetUsers.Id,
                     OrderDate = DateTime.Now,
                     TotalMoney = order.TotalMoney,
+                    Address = order.Address,
+                    Phone = order.Phone,
+                    Name = order.Name,
                 };
 
                 
@@ -377,6 +380,9 @@ namespace PesonalShopSolution.Controllers
                 await _context.SaveChangesAsync();
                 await DeleteProductCart(order.IdUser);
                 return RedirectToAction(nameof(Index));
+            }else if(!ModelState.IsValid)
+            {
+                return RedirectToAction("Checkout", "Home");
             }
             return View(order);
         }
